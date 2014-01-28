@@ -24,7 +24,7 @@ var VirtualJoystick	= function(opts)
 		else
 			this._buttonX = this._baseX - this._buttonOffset;
 		this._buttonY = this._baseY;
-		this._buttonPressed = false;
+		this.buttonPressed = false;
 		this._container.appendChild(this._buttonEl);
 		this._buttonEl.style.position	= "absolute"
 		this._buttonEl.style.display	= "none";
@@ -268,7 +268,7 @@ VirtualJoystick.prototype._onMove	= function(x, y)
 
 VirtualJoystick.prototype._onButtonUp	= function()
 {
-	this._buttonPressed = false;
+	this.buttonPressed = false;
 	var ctx		= this._buttonEl.getContext('2d');
 	ctx.beginPath(); 
 	ctx.strokeStyle = 'orange'; 
@@ -279,7 +279,7 @@ VirtualJoystick.prototype._onButtonUp	= function()
 
 VirtualJoystick.prototype._onButtonDown	= function()
 {
-	this._buttonPressed = true;	
+	this.buttonPressed = true;	
 	var ctx		= this._buttonEl.getContext('2d');
 	ctx.beginPath(); 
 	ctx.strokeStyle = 'white'; 
