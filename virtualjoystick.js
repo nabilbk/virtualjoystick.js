@@ -18,12 +18,14 @@ var VirtualJoystick	= function(opts)
 		this._strokeStyleButton	= opts.strokeStyleButton	|| 'orange';
 		this._buttonEl		= opts.buttonElement	|| this._buildFireButton();
 		this._buttonOffset = opts.buttonOffset || 400;
-		this._stationaryBase = true;
+		//this._stationaryBase = true;
 		if(this._switchHands == true)
 			this._buttonX = this._baseX + this._buttonOffset;
 		else
 			this._buttonX = this._baseX - this._buttonOffset;
 		this._buttonY = this._baseY;
+		this._buttonX = opts.buttonX || this._buttonX;
+		this._buttonY = opts.buttonY || this._buttonY;
 		this.buttonPressed = false;
 		this._container.appendChild(this._buttonEl);
 		this._buttonEl.style.position	= "absolute"
@@ -74,12 +76,21 @@ var VirtualJoystick	= function(opts)
 		this._$onMouseDown	= __bind(this._onMouseDown	, this);
 		this._$onMouseUp	= __bind(this._onMouseUp	, this);
 		this._$onMouseMove	= __bind(this._onMouseMove	, this);
-		this._baseEl.addEventListener( 'mousedown'	, this._$onMouseDown	, false );
-		this._baseEl.addEventListener( 'mouseup'	, this._$onMouseUp	, false );
-		this._baseEl.addEventListener( 'mousemove'	, this._$onMouseMove	, false );
-		this._stickEl.addEventListener( 'mousedown'	, this._$onMouseDown	, false );
-		this._stickEl.addEventListener( 'mouseup'	, this._$onMouseUp	, false );
-		this._stickEl.addEventListener( 'mousemove'	, this._$onMouseMove	, false );
+		if(this._stationaryBase == true){
+			this._baseEl.addEventListener( 'mousedown'	, this._$onMouseDown	, false );
+			this._baseEl.addEventListener( 'mouseup'	, this._$onMouseUp	, false );
+			this._baseEl.addEventListener( 'mousemove'	, this._$onMouseMove	, false );
+			this._stickEl.addEventListener( 'mousedown'	, this._$onMouseDown	, false );
+			this._stickEl.addEventListener( 'mouseup'	, this._$onMouseUp	, false );
+			this._stickEl.addEventListener( 'mousemove'	, this._$onMouseMove	, false );
+		}else{
+			this._container.addEventListener( 'mousedown'	, this._$onMouseDown	, false );
+			this._container.addEventListener( 'mouseup'	, this._$onMouseUp	, false );
+			this._container.addEventListener( 'mousemove'	, this._$onMouseMove	, false );
+			this._container.addEventListener( 'mousedown'	, this._$onMouseDown	, false );
+			this._container.addEventListener( 'mouseup'	, this._$onMouseUp	, false );
+			this._container.addEventListener( 'mousemove'	, this._$onMouseMove	, false );
+		}
 	}
 
 	if(this._addButton == true){
@@ -309,14 +320,13 @@ VirtualJoystick.prototype._onMouseDown	= function(event)
 
 VirtualJoystick.prototype._onMouseMove	= function(event)
 {
-    if(this._pressed == true){
+	if(this._pressed == true){
     	event.preventDefault();
     	var x	= event.clientX;
     	var y	= event.clientY;
-	
+	    
     	return this._onMove(x, y);
-    }
-    	   
+	}
 }
 VirtualJoystick.prototype._onButtonMouseUp	= function(event)
 {
@@ -382,8 +392,14 @@ VirtualJoystick.prototype._onButtonTouchEnd	= function(event)
 VirtualJoystick.prototype._buildJoystickBase	= function()
 {
 	var canvas	= document.createElement( 'canvas' );
-	canvas.width	= 256;//126
-	canvas.height	= 256;//126
+	//if(this._stationaryBase==false){
+	//	canvas.width	= window.innerWidth;//512
+	//	canvas.height	= window.innerHeight;//512
+	//}
+	//else{
+		canvas.width	= 512;//256;//126
+		canvas.height	= 512;//256;//126
+	//}
 	
 	var ctx		= canvas.getContext('2d');
 	ctx.beginPath(); 
@@ -507,4 +523,3 @@ VirtualJoystick.prototype._check3D = function()
     var exports = null != val && val.length && 'none' != val;
     return exports;
 }
-
