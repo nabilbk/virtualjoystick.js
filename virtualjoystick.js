@@ -309,11 +309,14 @@ VirtualJoystick.prototype._onMouseDown	= function(event)
 
 VirtualJoystick.prototype._onMouseMove	= function(event)
 {
+    if(this._pressed == true){
     	event.preventDefault();
     	var x	= event.clientX;
     	var y	= event.clientY;
 	
     	return this._onMove(x, y);
+    }
+    	   
 }
 VirtualJoystick.prototype._onButtonMouseUp	= function(event)
 {
