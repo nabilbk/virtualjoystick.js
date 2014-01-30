@@ -30,16 +30,19 @@
 		var keyboard = new THREEx.KeyboardState();
 		var joystick = new VirtualJoystick({
 			mouseSupport: true,
+			addButton: true,
 			stationaryBase: true,
-			//baseX: 200,
-			//baseY: 200,
+			//switchHands: true,
+			//baseX: 100,
+			//baseY: 400,
+			//buttonX: 800,
+			//buttonY: 500,
 			limitStickTravel: true,
-			stickRadius: 50,
-			addButton: true
+			stickRadius: 50	
 		});
 
 		var controls = new THREEx.FirstPersonControls(camera);
-		controls.movementSpeed = 1000;
+		controls.movementSpeed = 500;
 		controls.lookSpeed = 0.125;
 		controls.lookVertical = true;
 
@@ -140,6 +143,7 @@
 				controls.lat -= joystick.deltaY() * frameTime;
 			}
 			controls.update(frameTime);
+			camera.position.y = 0;
 			renderer.render(scene, camera);
 
 			debugText1.innerHTML = "lon: " + controls.lon.toFixed(1);
