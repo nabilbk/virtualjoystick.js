@@ -49,6 +49,7 @@ then you add that in your html
 How To Use It ?
 ===============
 
+* the Joystick and optional fire Button are very customizable
 * ```opts.container``` is the
 [dom element](https://developer.mozilla.org/en/DOM/element)
 on which we display joystick
@@ -68,9 +69,10 @@ which is display for its *base*.
 How to Use Fire Button
 ----------------------
 * first, set ```opts.addButton``` to true
-* by default, the Joystick will appear on the right and the Fire Button will appear on the left.
+* if you a Stationary Base Joystick, then by default, the Joystick will appear on the right and the Fire Button will appear on the left.
 * you may set ```opts.switchHands``` to true in order to switch this placement: Joystick on left, Fire Button on right.
 * by default, the offset Width between Joystick and Button is 400 px.  This can be changed by setting ```opts.buttonOffset``` to the desired integer, for example, 600.
-* By default the Button will always be placed at the same Height on the page as the Joystick.  This cannot be changed, but let us know if you would ever need this option for your game.
+* By default the Button will always be placed at the same Height on the page as the Joystick Base.
+* You may change the Button's location by setting ```opts.buttonX``` and ```opts.buttonY``` to the desired page X and Y coordinates.
 * The fire Button has a simple boolean flag attached to it called ```.buttonPressed``` which is true if pressed, false if not pressed.  If your VirtualJoystick object is called 'joystick', then this would become ```joystick.buttonPressed```
 * Inside your game loop, test if ```joystick.buttonPressed``` is true, and perform the appropriate action in your code, such as 'Fire bullet'.  
