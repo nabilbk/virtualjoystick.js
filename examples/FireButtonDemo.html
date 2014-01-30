@@ -20,8 +20,8 @@
 
 	<script src="http://threejs.org/build/three.min.js"></script>
 	<script src="http://jeromeetienne.github.io/threex.keyboardstate/threex.keyboardstate.js"></script>
-	<script src="js/virtualjoystick.js"></script>
-	<script src="js/threex.FirstPersonControls.js"></script>
+	<script src="../virtualjoystick.js"></script>
+	<script src="threex.FirstPersonControls.js"></script>
 	<script>
 		var scene = new THREE.Scene();
 		var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -72,12 +72,6 @@
 		var sunHeight = 0;
 		var frameTime = 0;
 
-		 //camera.position.y = 40;
-		 //camera.position.z = 160;
-
-		 //cube.rotation.x = 0.4;
-		 //cube.rotation.y = 0.6;
-
 		var debugText1 = document.getElementById("debug1");
 		var debugText2 = document.getElementById("debug2");
 
@@ -124,20 +118,7 @@
 				controls.moveBackward = true;
 			} else controls.moveBackward = false;
 
-			/*
-			if (joystick.right()) {		
-				controls.lon += 60 * frameTime;
-			}
-			if (joystick.left()) {	
-				controls.lon -= 60 * frameTime;
-			}	
-			if (joystick.up()) {
-				controls.lat += 60 * frameTime;	
-			}
-			if (joystick.down()) {
-				controls.lat -= 60 * frameTime;
-			}
-			*/
+		
 			if (joystick._pressed == true) {
 				controls.lon += joystick.deltaX() * frameTime;
 				controls.lat -= joystick.deltaY() * frameTime;
