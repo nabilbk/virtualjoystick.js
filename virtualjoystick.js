@@ -99,16 +99,16 @@ var VirtualJoystick = function(opts) {
 
 		}
 	}
-	if (this._addButton == true) {   
-		this._$onButtonTouchStart = __bind(this._onButtonTouchStart, this);   
-		this._$onButtonTouchEnd = __bind(this._onButtonTouchEnd, this);   
-		this._buttonEl.addEventListener('touchstart', this._$onButtonTouchStart, false);   
-		this._buttonEl.addEventListener('touchend', this._$onButtonTouchEnd, false);   
-		if (this._mouseSupport == true) {       
+	if (this._addButton == true) {
+		this._$onButtonTouchStart = __bind(this._onButtonTouchStart, this);
+		this._$onButtonTouchEnd = __bind(this._onButtonTouchEnd, this);
+		this._buttonEl.addEventListener('touchstart', this._$onButtonTouchStart, false);
+		this._buttonEl.addEventListener('touchend', this._$onButtonTouchEnd, false);
+		if (this._mouseSupport == true) {
 			this._$onButtonMouseDown = __bind(this._onButtonMouseDown, this);
 			this._$onButtonMouseUp = __bind(this._onButtonMouseUp, this);
 			this._buttonEl.addEventListener('mousedown', this._$onButtonMouseDown, false);
-			this._buttonEl.addEventListener('mouseup', this._$onButtonMouseUp, false);   
+			this._buttonEl.addEventListener('mouseup', this._$onButtonMouseUp, false);
 		}
 	}
 
@@ -257,19 +257,19 @@ VirtualJoystick.prototype._onDown = function(x, y) {
 
 	if (this._limitStickTravel === true) {
 		var deltaX = this.deltaX();
-		var deltaY = this.deltaY();       
+		var deltaY = this.deltaY();
 		var stickDistance = Math.sqrt((deltaX * deltaX) + (deltaY * deltaY));
-		if (stickDistance > this._stickRadius) {     
-			var stickNormalizedX = deltaX / stickDistance;     
+		if (stickDistance > this._stickRadius) {
+			var stickNormalizedX = deltaX / stickDistance;
 			var stickNormalizedY = deltaY / stickDistance;
 
 			     
-			this._stickX = stickNormalizedX * this._stickRadius + this._baseX;     
-			this._stickY = stickNormalizedY * this._stickRadius + this._baseY;   
+			this._stickX = stickNormalizedX * this._stickRadius + this._baseX;
+			this._stickY = stickNormalizedY * this._stickRadius + this._baseY;
 		}
 	}
 
-	this._stickEl.style.display = "";   
+	this._stickEl.style.display = "";
 	this._move(this._stickEl.style, (this._stickX - this._stickEl.width / 2), (this._stickY - this._stickEl.height / 2));
 };
 
@@ -318,36 +318,36 @@ VirtualJoystick.prototype._onButtonDown = function() {
 //		bind touch events (and mouse events for debug)			//
 //////////////////////////////////////////////////////////////////////////////////
 
-VirtualJoystick.prototype._onMouseUp = function(event) {   
+VirtualJoystick.prototype._onMouseUp = function(event) {
 	event.preventDefault();
-	this._onButtonUp();   
+	this._onButtonUp();
 	return this._onUp();
 };
 
-VirtualJoystick.prototype._onMouseDown = function(event) {   
-	event.preventDefault();   
-	var x = event.clientX;   
+VirtualJoystick.prototype._onMouseDown = function(event) {
+	event.preventDefault();
+	var x = event.clientX;
 	var y = event.clientY;
-	if (event.target == this._buttonEl) return;   
+	if (event.target == this._buttonEl) return;
 	return this._onDown(x, y);
 };
 
 VirtualJoystick.prototype._onMouseMove = function(event) {
-	if (this._pressed == true) { 
+	if (this._pressed == true) {
 		event.preventDefault();
-		if (event.target == this._buttonEl) return; 
-		var x = event.clientX;   
-		var y = event.clientY;      
+		if (event.target == this._buttonEl) return;
+		var x = event.clientX;
+		var y = event.clientY;
 		return this._onMove(x, y);
 	}
 };
-VirtualJoystick.prototype._onButtonMouseUp = function(event) {   
-	event.preventDefault();   
+VirtualJoystick.prototype._onButtonMouseUp = function(event) {
+	event.preventDefault();
 	return this._onButtonUp();
 };
 
-VirtualJoystick.prototype._onButtonMouseDown = function(event) {   
-	event.preventDefault();   
+VirtualJoystick.prototype._onButtonMouseDown = function(event) {
+	event.preventDefault();
 	return this._onButtonDown();
 };
 
@@ -355,44 +355,41 @@ VirtualJoystick.prototype._onButtonMouseDown = function(event) {   
 //		comment								//
 //////////////////////////////////////////////////////////////////////////////////
 
-VirtualJoystick.prototype._onTouchStart = function(event) {   
-	event.preventDefault();    //var touch	= event.targetTouches[0];
+VirtualJoystick.prototype._onTouchStart = function(event) {
+	event.preventDefault(); //var touch	= event.targetTouches[0];
 	var touch = event.changedTouches[0];
 	if (touch.target == this._buttonEl) return;
 
-	   
-	var x = touch.pageX;   
-	var y = touch.pageY;   
+	var x = touch.pageX;
+	var y = touch.pageY;
 	return this._onDown(x, y);
 };
 
-VirtualJoystick.prototype._onTouchEnd = function(event) {   
+VirtualJoystick.prototype._onTouchEnd = function(event) {
 	event.preventDefault();
 	var touch = event.changedTouches[0];
 	if (touch.target == this._buttonEl) return;
-
-	   
-	return this._onUp();
+    
+    return this._onUp();
 };
 
-VirtualJoystick.prototype._onTouchMove = function(event) {   
+VirtualJoystick.prototype._onTouchMove = function(event) {
 	event.preventDefault();
 	var touch = event.changedTouches[0];
 	if (touch.target == this._buttonEl) return;
 
-	   
-	var x = touch.pageX;   
-	var y = touch.pageY;   
+	var x = touch.pageX;
+	var y = touch.pageY;
 	return this._onMove(x, y);
 };
 
-VirtualJoystick.prototype._onButtonTouchStart = function(event) {   
-	event.preventDefault();   
+VirtualJoystick.prototype._onButtonTouchStart = function(event) {
+	event.preventDefault();
 	return this._onButtonDown();
 };
 
-VirtualJoystick.prototype._onButtonTouchEnd = function(event) {   
-	event.preventDefault();   
+VirtualJoystick.prototype._onButtonTouchEnd = function(event) {
+	event.preventDefault();
 	return this._onButtonUp();
 };
 
@@ -468,48 +465,46 @@ VirtualJoystick.prototype._buildFireButton = function() {
 //      modified from https://github.com/component/translate and dependents
 //////////////////////////////////////////////////////////////////////////////////
 
-VirtualJoystick.prototype._move = function(style, x, y) { 
-	if (this._transform) {   
-		if (this._has3d) {     
-			style[this._transform] = 'translate3d(' + x + 'px,' + y + 'px, 0)';   
-		} else {     
-			style[this._transform] = 'translate(' + x + 'px,' + y + 'px)';   
-		} 
-	} else {   
-		el.style.left = x + 'px';   
-		el.style.top = y + 'px'; 
+VirtualJoystick.prototype._move = function(style, x, y) {
+	if (this._transform) {
+		if (this._has3d) {
+			style[this._transform] = 'translate3d(' + x + 'px,' + y + 'px, 0)';
+		} else {
+			style[this._transform] = 'translate(' + x + 'px,' + y + 'px)';
+		}
+	} else {
+		el.style.left = x + 'px';
+		el.style.top = y + 'px';
 	}
 };
 
-VirtualJoystick.prototype._getTransformProperty = function() {   
-	var styles = [     'webkitTransform',      'MozTransform',      'msTransform',      'OTransform',      'transform'   ];      
-	var el = document.createElement('p');   
-	var style;      
-	for (var i = 0; i < styles.length; i++) {     
-		style = styles[i];     
-		if (null != el.style[style]) {       
-			return style;       
-			break;     
-		}   
-	}        
+VirtualJoystick.prototype._getTransformProperty = function() {
+	var styles = ['webkitTransform', 'MozTransform', 'msTransform', 'OTransform', 'transform'];
+	var el = document.createElement('p');
+	var style;
+	for (var i = 0; i < styles.length; i++) {
+		style = styles[i];
+		if (null != el.style[style]) {
+			return style;
+			break;
+		}
+	}
 };
-VirtualJoystick.prototype._check3D = function() {          
-	var prop = this._getTransformProperty();    // IE8<= doesn't have `getComputedStyle`
-	   
-	if (!prop || !window.getComputedStyle) return module.exports = false;      
-	var map = {     
+VirtualJoystick.prototype._check3D = function() {
+	var prop = this._getTransformProperty(); // IE8<= doesn't have `getComputedStyle`
+	if (!prop || !window.getComputedStyle) return module.exports = false;
+	var map = {
 		webkitTransform: '-webkit-transform',
 		     OTransform: '-o-transform',
 		     msTransform: '-ms-transform',
 		     MozTransform: '-moz-transform',
 		     transform: 'transform'   
-	};       // from: https://gist.github.com/lorenzopolidori/3794226
-	   
-	var el = document.createElement('div');   
-	el.style[prop] = 'translate3d(1px,1px,1px)';   
-	document.body.insertBefore(el, null);   
-	var val = getComputedStyle(el).getPropertyValue(map[prop]);   
-	document.body.removeChild(el);   
-	var exports = null != val && val.length && 'none' != val;   
+	};// from: https://gist.github.com/lorenzopolidori/3794226
+	document.createElement('div');
+	el.style[prop] = 'translate3d(1px,1px,1px)';
+	document.body.insertBefore(el, null);
+	var val = getComputedStyle(el).getPropertyValue(map[prop]);
+	document.body.removeChild(el);
+	var exports = null != val && val.length && 'none' != val;
 	return exports;
 };
