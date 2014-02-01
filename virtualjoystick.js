@@ -59,7 +59,7 @@ var VirtualJoystick = function(opts) {
 		this._buttonEl.style.left = (this._buttonX - this._buttonEl.width / 2) + "px";
 		this._buttonEl.style.top = (this._buttonY - this._buttonEl.height / 2) + "px";
 		this._buttonEl.style.zIndex = "10";
-	}          
+	}
 	this._transform = (opts.useCssTransform !== undefined ? opts.useCssTransform : true) ? this._getTransformProperty() : false;       
 	this._has3d = this._check3D();
 
@@ -289,8 +289,6 @@ VirtualJoystick.prototype._onMove = function(x, y) {
 			this._stickY = stickNormalizedY * this._stickRadius + this._baseY;
 		}
 	}
-
-	   
 	this._move(this._stickEl.style, (this._stickX - this._stickEl.width / 2), (this._stickY - this._stickEl.height / 2));
 };
 
