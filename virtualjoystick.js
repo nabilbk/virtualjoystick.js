@@ -244,7 +244,7 @@ VirtualJoystick.prototype._onUp = function() {
 };
 
 VirtualJoystick.prototype._onDown = function(x, y) {
-	this._pressed = true;  
+	this._pressed = true;
 	if (this._stationaryBase == false) {
 		this._baseX = x;
 		this._baseY = y;
@@ -262,8 +262,6 @@ VirtualJoystick.prototype._onDown = function(x, y) {
 		if (stickDistance > this._stickRadius) {
 			var stickNormalizedX = deltaX / stickDistance;
 			var stickNormalizedY = deltaY / stickDistance;
-
-			     
 			this._stickX = stickNormalizedX * this._stickRadius + this._baseX;
 			this._stickY = stickNormalizedY * this._stickRadius + this._baseY;
 		}
