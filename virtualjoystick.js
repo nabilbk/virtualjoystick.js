@@ -157,31 +157,31 @@ VirtualJoystick.touchScreenAvailable = function() {
 
 /**
  * microevents.js - https://github.com/jeromeetienne/microevent.js
- */
-
-(function(destObj) {       
-	destObj.addEventListener        = function(event, fct) {               
-		if (this._events === undefined)         this._events        = {};               
-		this._events[event] = this._events[event]        || [];               
-		this._events[event].push(fct);               
-		return fct;       
-	};       
-	destObj.removeEventListener        = function(event, fct) {               
-		if (this._events === undefined)         this._events        = {};               
-		if (event in this._events === false )        return;               
-		this._events[event].splice(this._events[event].indexOf(fct), 1);       
-	};       
-	destObj.dispatchEvent                = function(event /* , args... */ ) {               
-		if (this._events === undefined)         this._events        = {};               
-		if (this._events[event] === undefined)        return;               
-		var tmpArray        = this._events[event].slice();               
-		for (var i = 0; i < tmpArray.length; i++) {                       
-			var result        = tmpArray[i].apply(this, Array.prototype.slice.call(arguments, 1));                       
-			if (result !== undefined)        return result;               
-		}               
-		return undefined;       
+*/
+;(function(destObj){
+	destObj.addEventListener	= function(event, fct){
+		if(this._events === undefined) 	this._events	= {};
+		this._events[event] = this._events[event]	|| [];
+		this._events[event].push(fct);
+		return fct;
+	};
+	destObj.removeEventListener	= function(event, fct){
+		if(this._events === undefined) 	this._events	= {};
+		if( event in this._events === false  )	return;
+		this._events[event].splice(this._events[event].indexOf(fct), 1);
+	};
+	destObj.dispatchEvent		= function(event /* , args... */){
+		if(this._events === undefined) 	this._events	= {};
+		if( this._events[event] === undefined )	return;
+		var tmpArray	= this._events[event].slice(); 
+		for(var i = 0; i < tmpArray.length; i++){
+			var result	= tmpArray[i].apply(this, Array.prototype.slice.call(arguments, 1))
+			if( result !== undefined )	return result;
+		}
+		return undefined
 	};
 })(VirtualJoystick.prototype);
+
 
 //////////////////////////////////////////////////////////////////////////////////
 //                                                                                //
@@ -458,10 +458,11 @@ VirtualJoystick.prototype._buildFireButton = function() {
 
 //////////////////////////////////////////////////////////////////////////////////
 //		move using translate3d method with fallback to translate > 'top' and 'left'		
-//      modified from https://github.com/component/translate and dependents
+//      modified from https://github.com/component/translate and dependents
 //////////////////////////////////////////////////////////////////////////////////
 
-VirtualJoystick.prototype._move = function(style, x, y) {
+VirtualJoystick.prototype._move = function(style, x, y)
+{
 	if (this._transform) {
 		if (this._has3d) {
 			style[this._transform] = 'translate3d(' + x + 'px,' + y + 'px, 0)';
@@ -469,34 +470,48 @@ VirtualJoystick.prototype._move = function(style, x, y) {
 			style[this._transform] = 'translate(' + x + 'px,' + y + 'px)';
 		}
 	} else {
-		el.style.left = x + 'px';
-		el.style.top = y + 'px';
+		style.left = x + 'px';
+		style.top = y + 'px';
 	}
 };
 
-VirtualJoystick.prototype._getTransformProperty = function() {
-	var styles = ['webkitTransform', 'MozTransform', 'msTransform', 'OTransform', 'transform'];
+VirtualJoystick.prototype._getTransformProperty = function() 
+{
+	var styles = [
+		'webkitTransform',
+		'MozTransform',
+		'msTransform',
+		'OTransform',
+		'transform'
+	];
+
 	var el = document.createElement('p');
 	var style;
+
 	for (var i = 0; i < styles.length; i++) {
 		style = styles[i];
 		if (null != el.style[style]) {
 			return style;
-			break;
 		}
-	}
+	}         
 };
-VirtualJoystick.prototype._check3D = function() {
-	var prop = this._getTransformProperty(); // IE8<= doesn't have `getComputedStyle`
+  
+VirtualJoystick.prototype._check3D = function() 
+{        
+	var prop = this._getTransformProperty();
+	// IE8<= doesn't have `getComputedStyle`
 	if (!prop || !window.getComputedStyle) return module.exports = false;
+
 	var map = {
 		webkitTransform: '-webkit-transform',
-		     OTransform: '-o-transform',
-		     msTransform: '-ms-transform',
-		     MozTransform: '-moz-transform',
-		     transform: 'transform'   
-	};// from: https://gist.github.com/lorenzopolidori/3794226
-	document.createElement('div');
+		OTransform: '-o-transform',
+		msTransform: '-ms-transform',
+		MozTransform: '-moz-transform',
+		transform: 'transform'
+	};
+
+	// from: https://gist.github.com/lorenzopolidori/3794226
+	var el = document.createElement('div');
 	el.style[prop] = 'translate3d(1px,1px,1px)';
 	document.body.insertBefore(el, null);
 	var val = getComputedStyle(el).getPropertyValue(map[prop]);
