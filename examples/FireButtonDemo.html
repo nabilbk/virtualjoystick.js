@@ -30,16 +30,16 @@
 
 		var keyboard = new THREEx.KeyboardState();
 		var joystick = new VirtualJoystick({
-          	    //mouseSupport: true,
-		    addButton: true,
- 	    	    stationaryBase: true,
- 	    	    switchHands: true
-		    //baseX: 680,
-		    //baseY: 400,
-		    //buttonX: 800,
-		    //buttonY: 500,
- 	            //limitStickTravel: true,
-		    //stickRadius: 50	
+          	mouseSupport: true,
+			addButton: true,
+			//stationaryBase: true,
+          	switchHands: true
+			//baseX: 680,
+			//baseY: 400,
+			//buttonX: 800,
+			//buttonY: 500,
+          	//limitStickTravel: true,
+          	//stickRadius: 50	
 		});
 		
 		camera.position.z = 100;
@@ -49,7 +49,8 @@
 		controls.movementSpeed = 500;
 		controls.lookSpeed = 0.125;
 		controls.lookVertical = true;
-		controls.lon = -90;
+		var lookVector = new THREE.Vector3();
+		//controls.lon = -90;
 
 		var renderer = new THREE.WebGLRenderer();
 		renderer.setSize(window.innerWidth, window.innerHeight);
@@ -74,21 +75,20 @@
 		scene.add(light);
 		
 		// FLOOR
-		var floorTexture = new THREE.ImageUtils.loadTexture( 'images/checkerboard.jpg' );
-		floorTexture.wrapS = floorTexture.wrapT = THREE.RepeatWrapping; 
-		floorTexture.repeat.set( 10, 10 );
-		var floorMaterial = new THREE.MeshBasicMaterial( { map: floorTexture, side: THREE.DoubleSide } );
-		var floorGeometry = new THREE.PlaneGeometry(1000, 1000, 10, 10);
-		var floor = new THREE.Mesh(floorGeometry, floorMaterial);
-		floor.position.y = -10;
-		floor.rotation.x = Math.PI / 2;
-		scene.add(floor);
+	var floorTexture = new THREE.ImageUtils.loadTexture( 'images/checkerboard.jpg' );
+	floorTexture.wrapS = floorTexture.wrapT = THREE.RepeatWrapping; 
+	floorTexture.repeat.set( 10, 10 );
+	var floorMaterial = new THREE.MeshBasicMaterial( { map: floorTexture, side: THREE.DoubleSide } );
+	var floorGeometry = new THREE.PlaneGeometry(1000, 1000, 10, 10);
+	var floor = new THREE.Mesh(floorGeometry, floorMaterial);
+	floor.position.y = -10;
+	floor.rotation.x = Math.PI / 2;
+	scene.add(floor);
 
 		var sunRiseFlag = true;
 		var sunHeight = 0;
 		var frameTime = 0;
-
-		 
+	 
 		cube.rotation.y = 0.6;
 
 		var debugText1 = document.getElementById("debug1");
@@ -131,6 +131,9 @@
 				controls.moveLeft = true;
 			} else controls.moveLeft = false;
 			if (keyboard.pressed("W")) {
+				//lookVector.subVectors(controls.target, camera.position);
+				//lookVector.multiplyScalar(200*frameTime);
+				//camera.position.add(lookVector);
 				controls.moveForward = true;
 			} else controls.moveForward = false;
 			if (keyboard.pressed("S")) {
@@ -140,7 +143,10 @@
 			
 			if (joystick._pressed == true) {
 				controls.lon += joystick.deltaX() * frameTime;
-				controls.lat -= joystick.deltaY() * frameTime;
+				//controls.lat -= joystick.deltaY() * frameTime;
+				lookVector.subVectors(camera.position, controls.target);
+				lookVector.multiplyScalar(joystick.deltaY()*frameTime);
+				camera.position.add(lookVector);
 			}
 			controls.update(frameTime);
 			camera.position.y = 0;
