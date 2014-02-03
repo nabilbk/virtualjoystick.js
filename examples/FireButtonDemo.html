@@ -19,43 +19,37 @@
 		Debug Info
 	</div>
 
+	<div id="debug3" style="position:fixed; left:5%; top:12%; color:grey;">
+		Debug Info
+	</div>
+
 	<script src="http://threejs.org/build/three.min.js"></script>
 	<script src="http://jeromeetienne.github.io/threex.keyboardstate/threex.keyboardstate.js"></script>
 	<script src="js/virtualjoystick.js"></script>
 	<script src="js/threex.FirstPersonControls.js"></script>
 	<script>
+		// GLOBAL VARIABLES ////////////////////////////////////////////////////////////////////////////
 		var scene = new THREE.Scene();
 		var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 		var clock = new THREE.Clock();
 
 		var keyboard = new THREEx.KeyboardState();
 		var joystick = new VirtualJoystick({
-          	mouseSupport: true,
+			mouseSupport: true,
 			addButton: true,
-			//stationaryBase: true,
- 	                switchHands: true
+			stationaryBase: true,
+			switchHands: true
 			//baseX: 680,
 			//baseY: 400,
 			//buttonX: 800,
 			//buttonY: 500,
- 	                //limitStickTravel: true,
- 	                //stickRadius: 50	
+			//limitStickTravel: true,
+			//stickRadius: 50	
 		});
-		
-		camera.position.z = 100;
-		camera.lookAt(scene);
-
 		var controls = new THREEx.FirstPersonControls(camera);
-		controls.movementSpeed = 500;
-		controls.lookSpeed = 0.125;
-		controls.lookVertical = true;
 		var lookVector = new THREE.Vector3();
-		//controls.lon = -90;
-
 		var renderer = new THREE.WebGLRenderer();
-		renderer.setSize(window.innerWidth, window.innerHeight);
-		document.body.appendChild(renderer.domElement);
-		window.addEventListener('resize', onWindowResize, false);
+
 
 		var cubeGeometry = new THREE.CubeGeometry(20, 20, 20);
 		var cubeMaterial = new THREE.MeshLambertMaterial({
@@ -71,58 +65,78 @@
 		var sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
 		scene.add(sphere);
 
+		var bulletGeometry = new THREE.SphereGeometry(5);
+		var bulletMaterial = new THREE.MeshBasicMaterial({
+			color: 'rgb(255,0,0)'
+		});
+		var bulletSphere = new THREE.Mesh(bulletGeometry, bulletMaterial);
+		scene.add(bulletSphere);
+
 		var light = new THREE.PointLight('rgb(255,255,255)', 1, 0);
 		scene.add(light);
-		
-		// FLOOR
-	var floorTexture = new THREE.ImageUtils.loadTexture( 'images/checkerboard.jpg' );
-	floorTexture.wrapS = floorTexture.wrapT = THREE.RepeatWrapping; 
-	floorTexture.repeat.set( 10, 10 );
-	var floorMaterial = new THREE.MeshBasicMaterial( { map: floorTexture, side: THREE.DoubleSide } );
-	var floorGeometry = new THREE.PlaneGeometry(1000, 1000, 10, 10);
-	var floor = new THREE.Mesh(floorGeometry, floorMaterial);
-	floor.position.y = -10;
-	floor.rotation.x = Math.PI / 2;
-	scene.add(floor);
 
-		var sunRiseFlag = true;
-		var sunHeight = 0;
+		 // FLOOR
+		var floorTexture = new THREE.ImageUtils.loadTexture('images/checkerboard.jpg');
+		floorTexture.wrapS = floorTexture.wrapT = THREE.RepeatWrapping;
+		floorTexture.repeat.set(10, 10);
+		var floorMaterial = new THREE.MeshBasicMaterial({
+			map: floorTexture,
+			side: THREE.DoubleSide
+		});
+		var floorGeometry = new THREE.PlaneGeometry(1000, 1000, 10, 10);
+		var floor = new THREE.Mesh(floorGeometry, floorMaterial);
+		floor.position.y = -10;
+		floor.rotation.x = Math.PI / 2;
+		scene.add(floor);
+
 		var frameTime = 0;
-	 
-		cube.rotation.y = 0.6;
+		var canShoot = true;
+
+		function Bullet() {
+			this.alive = false;
+			this.position = new THREE.Vector3();
+			this.direction = new THREE.Vector3();
+		}
+		var bullet = new Bullet();
+		var bulletSpeed = 5;
+		var bulletCounter = 0;
 
 		var debugText1 = document.getElementById("debug1");
 		var debugText2 = document.getElementById("debug2");
+		var debugText3 = document.getElementById("debug3");
+		 // END GLOBAL VARIABLES /////////////////////////////////////////////////////////////////
 
+		setup();
 		animate();
+
+
+		function setup() {
+
+			renderer.setSize(window.innerWidth, window.innerHeight);
+			document.body.appendChild(renderer.domElement);
+			window.addEventListener('resize', onWindowResize, false);
+			light.position.set(50, 50, 50);
+			sphere.position = light.position;
+
+
+			camera.position.z = 100;
+			camera.lookAt(scene);
+
+
+			controls.movementSpeed = 500;
+			controls.lookSpeed = 0.125;
+			controls.lookVertical = true;
+
+
+			cube.rotation.y = 0.6;
+
+		} //end function setup()
 
 		function animate() {
 
 			requestAnimationFrame(animate);
 
 			frameTime = clock.getDelta();
-
-			if (sunRiseFlag == true) {
-				sunHeight = sunHeight + 60 * frameTime;
-			}
-
-			if (sunRiseFlag == false) {
-				sunHeight = sunHeight - 60 * frameTime;
-			}
-
-			if (sunHeight > 150) {
-				sunHeight = 150;
-				sunRiseFlag = false;
-			}
-
-			if (sunHeight < 0) {
-				sunHeight = 0;
-				sunRiseFlag = true;
-			}
-
-			light.position.set(50, sunHeight, 50);
-			sphere.position = light.position;
-
 
 			if (keyboard.pressed("D")) {
 				controls.moveRight = true;
@@ -140,28 +154,74 @@
 				controls.moveBackward = true;
 			} else controls.moveBackward = false;
 
-			
+
 			if (joystick._pressed == true) {
 				controls.lon += joystick.deltaX() * frameTime;
-				//controls.lat -= joystick.deltaY() * frameTime;
-				lookVector.subVectors(camera.position, controls.target);
-				lookVector.multiplyScalar(joystick.deltaY()*frameTime);
-				camera.position.add(lookVector);
+				controls.lat -= joystick.deltaY() * frameTime;
+				//lookVector.subVectors(camera.position, controls.target);
+				//lookVector.multiplyScalar(joystick.deltaY() * frameTime);
+				//camera.position.add(lookVector);
 			}
+
+			if (joystick.buttonPressed == false) {
+				canShoot = true;
+			}
+
+			if (joystick.buttonPressed == true) {
+				if (canShoot == true) {
+					shootBullet();
+					canShoot = false;
+				}
+			}
+
+			if (bullet.alive == true) {
+				moveBullet();
+			}
+
 			controls.update(frameTime);
 			camera.position.y = 0;
 			renderer.render(scene, camera);
 
-			debugText1.innerHTML = "lon: " + controls.lon.toFixed(1);
-			debugText2.innerHTML = "FireButton: " + joystick.buttonPressed;
+			debugText1.innerHTML = "bulletCounter: " + bulletCounter;
+			debugText2.innerHTML = "bulletSpherePos.z: " + bulletSphere.position.z.toFixed(1);
+			debugText3.innerHTML = "canShoot: " + canShoot;
+
+		} //end function animate()
+
+		function shootBullet() {
+
+			bullet.alive = true;
+			//spawn bullet at pleyer's location
+			bullet.position.copy(camera.position);
+			//get shooting direction from look target
+			bullet.direction.subVectors(controls.target, camera.position);
+
+			//move bullet out 20 units from the player
+			bullet.direction.multiplyScalar(20);
+			bullet.position.add(bullet.direction);
+			//reset bullet direction to unit length of 1
+			bullet.direction.normalize();
+			//multiply by speed
+			bullet.direction.multiplyScalar(bulletSpeed);
+
+			bulletCounter += 1;
+
+		}
+
+		function moveBullet() {
+
+			bullet.position.add(bullet.direction) * frameTime;
+			bulletSphere.position.copy(bullet.position);
 
 		}
 
 		function onWindowResize() {
+
 			camera.aspect = window.innerWidth / window.innerHeight;
 			camera.updateProjectionMatrix();
 			renderer.setSize(window.innerWidth, window.innerHeight);
 			controls.handleResize();
+
 		}
 	</script>
 </body>
