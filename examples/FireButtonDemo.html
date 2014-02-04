@@ -137,8 +137,8 @@
 			//begin by looking at the origin
 			camera.lookAt(scene);
 
-
-			controls.movementSpeed = 100;
+			//setup controls parameters
+			controls.movementSpeed = 200;
 			controls.lookSpeed = 0.125;
 			controls.lookVertical = true;
 
@@ -152,6 +152,7 @@
 			//store how much time has passed since the last animation frame
 			frameTime = clock.getDelta();
 
+			//query keyboard for keypresses 
 			if (keyboard.pressed("D")) {
 				controls.moveRight = true;
 			} else controls.moveRight = false;
@@ -164,19 +165,8 @@
 			if (keyboard.pressed("S")) {
 				controls.moveBackward = true;
 			} else controls.moveBackward = false;
-
-
-			if (joystick._pressed == true) {
-				//joystick left and right will turn the camera in that direction
-				controls.lon += joystick.deltaX() * frameTime;
-				//joystick up and down will tilt the camera up and down
-				//controls.lat -= joystick.deltaY() * frameTime;
-
-				//joystick up will move player forward, joystick down moves backward
-				lookVector.subVectors(camera.position, controls.target);
-				lookVector.multiplyScalar(joystick.deltaY() * frameTime);
-				camera.position.add(lookVector);
-			}
+			
+			//query fire button first, because it needs the current camera position
 			//if firebutton is NOT pressed, reset it so we can fire again
 			if (joystick.buttonPressed == false) {
 				canShoot = true;
@@ -189,10 +179,24 @@
 					canShoot = false;
 				}
 			}
+			//now, check if joystick Stick is being moved
+			if (joystick._pressed == true) {
+				//joystick left and right will turn the camera in that direction
+				controls.lon += joystick.deltaX() * frameTime;
+				//joystick up and down will tilt the camera up and down
+				//controls.lat -= joystick.deltaY() * frameTime;
+
+				//joystick up will move player forward, joystick down moves backward
+				lookVector.subVectors(camera.position, controls.target);
+				lookVector.multiplyScalar(joystick.deltaY() * frameTime);
+				camera.position.add(lookVector);
+			}
+			
 			//if bullet is alive, update it
 			if (bullet.alive == true) {
 				moveBullet();
 			}
+			
 			//update first person controls
 			controls.update(frameTime);
 			//no flying, clamp player camera to slightly above the ground
@@ -210,7 +214,7 @@
 		function shootBullet() {
 			//set bullet to alive
 			bullet.alive = true;
-			//spawn bullet at pleyer's location
+			//spawn bullet at player's location
 			bullet.position.copy(camera.position);
 			//get shooting direction from look target
 			bullet.direction.subVectors(controls.target, camera.position);
