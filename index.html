@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="Virtualjoystick.js : a virtual joystick library to emulate a joystick on touch screen in javascript" />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Virtualjoystick.js</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/erichlof/virtualjoystick.js">View on GitHub</a>
+
+          <h1 id="project_title">Virtualjoystick.js</h1>
+          <h2 id="project_tagline">a virtual joystick library to emulate a joystick on touch screen in javascript</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/erichlof/virtualjoystick.js/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/erichlof/virtualjoystick.js/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h1>
+<a name="virtualjoystickjs" class="anchor" href="#virtualjoystickjs"><span class="octicon octicon-link"></span></a>virtualjoystick.js</h1>
+
+<p>It is small library to emulate a virtual joystick for touchscreen.
+For details, see <a href="http://learningthreejs.com/blog/2011/12/26/let-s-make-a-3d-game-virtual-joystick/">"Let’s Make a 3D Game: Virtual Joystick"</a>
+post on 
+<a href="http://learningthreejs.com">"learningthreejs blog"</a>.</p>
+
+<h1>
+<a name="show-dont-tell" class="anchor" href="#show-dont-tell"><span class="octicon octicon-link"></span></a>Show Don't Tell</h1>
+
+<ul>
+<li>
+<a href="http://jeromeetienne.github.io/virtualjoystick.js/examples/basic.html">examples/basic.html</a>
+[<a href="https://github.com/jeromeetienne/virtualjoystick.js/blob/master/examples/basic.html">view source</a>] :
+It shows a basic usage of the library.</li>
+<li>
+<a href="http://jeromeetienne.github.io/virtualjoystick.js/examples/dual.html">examples/dual.html</a>
+[<a href="https://github.com/jeromeetienne/virtualjoystick.js/blob/master/examples/dual.html">view source</a>] :
+It shows how to have multiple virtual joystick on the same page</li>
+<li>
+<a href="http://jeromeetienne.github.io/virtualjoystick.js/examples/stationarybase.html">examples/stationarybase.html</a>
+[<a href="https://github.com/jeromeetienne/virtualjoystick.js/blob/master/examples/stationarybase.html">view source</a>] :
+It shows how to have a stationary base. by <a href="https://github.com/erichlof">@erichlof</a>
+</li>
+<li>
+<a href="http://jeromeetienne.github.io/virtualjoystick.js/examples/LimitStickTravelDemo.html">examples/LimitStickTravelDemo.html</a>
+[<a href="https://github.com/jeromeetienne/virtualjoystick.js/blob/master/examples/LimitStickTravelDemo.html">view source</a>] :
+It shows how to limit the distance that the stick can travel from its base. by <a href="https://github.com/erichlof">@erichlof</a>
+</li>
+<li>
+<a href="http://jeromeetienne.github.io/virtualjoystick.js/examples/LimitStickTravelDemoStationaryBase.html">examples/LimitStickTravelDemoStationaryBase.html</a>
+[<a href="https://github.com/jeromeetienne/virtualjoystick.js/blob/master/examples/LimitStickTravelDemoStationaryBase.html">view source</a>] :
+Limited Stick (same as above), but with Stationary Base. by <a href="https://github.com/erichlof">@erichlof</a>
+</li>
+<li>
+<a href="http://jeromeetienne.github.io/virtualjoystick.js/examples/FireButtonDemo.html">examples/FireButtonDemo.html</a>
+[<a href="https://github.com/jeromeetienne/virtualjoystick.js/blob/master/examples/FireButtonDemo.html">view source</a>] :
+Shows how to add a Fire Button to the Joystick. by <a href="https://github.com/erichlof">@erichlof</a>
+</li>
+</ul><h1>
+<a name="how-to-install-it" class="anchor" href="#how-to-install-it"><span class="octicon octicon-link"></span></a>How To Install It</h1>
+
+<p>You can install it manually. Just do </p>
+
+<div class="highlight highlight-html"><pre><span class="nt">&lt;script </span><span class="na">src=</span><span class="s">'virtualjoystick.js'</span><span class="nt">&gt;&lt;/script&gt;</span>
+</pre></div>
+
+<p>You can install with <a href="http://bower.io/">bower</a>.</p>
+
+<div class="highlight highlight-bash"><pre>bower install virtualjoystick.js
+</pre></div>
+
+<p>then you add that in your html</p>
+
+<div class="highlight highlight-html"><pre><span class="nt">&lt;script </span><span class="na">src=</span><span class="s">"bower_components/virtualjoystick.js/virtualjoystick.js"</span><span class="nt">&gt;&lt;/script&gt;</span>
+</pre></div>
+
+<h1>
+<a name="how-to-use-it-" class="anchor" href="#how-to-use-it-"><span class="octicon octicon-link"></span></a>How To Use It ?</h1>
+
+<ul>
+<li>the Joystick and optional fire Button are very customizable</li>
+<li>
+<code>opts.container</code> is the
+<a href="https://developer.mozilla.org/en/DOM/element">dom element</a>
+on which we display joystick</li>
+<li>
+<code>opts.stickElement</code> is the
+<a href="https://developer.mozilla.org/en/DOM/element">dom element</a>
+which is display for the <em>stick</em> of the joystick.</li>
+<li>
+<code>opts.baseElement</code> is the 
+<a href="https://developer.mozilla.org/en/DOM/element">dom element</a>
+which is display for its <em>base</em>.</li>
+<li>Both elements are optional with sensible default</li>
+<li>you may set <code>opts.mouseSupport</code> to true during debug.</li>
+<li>you may set <code>opts.stationaryBase</code> to true for a permanent Stationary joystick base.</li>
+<li>if you do use a stationary base, you must also set <code>opts.baseX</code> to the desired X-coordinate on the webpage and <code>opts.baseY</code> to the desired Y-coordinate.  The joystick base will now be fixed at this location.</li>
+<li>you may set <code>opts.limitStickTravel</code> to true in order to limit the distance that the stick can travel from its base.  This will create an invisible circle barrier that the stick cannot leave. </li>
+<li>if you do use <code>opts.limitStickTravel</code> , you can also set <code>opts.stickRadius</code> to the desired radius (in pixels).  The stick will now be confined to stickRadius.  If you do not set <code>opts.stickRadius</code> , it will default to 100 pixels radius.</li>
+</ul><h2>
+<a name="how-to-use-fire-button" class="anchor" href="#how-to-use-fire-button"><span class="octicon octicon-link"></span></a>How to Use Fire Button</h2>
+
+<ul>
+<li>first, set <code>opts.addButton</code> to true</li>
+<li>if you have a Stationary-Base Joystick, then by default, the Joystick will appear on the right and the Fire Button will appear on the left.</li>
+<li>you may set <code>opts.switchHands</code> to true in order to switch this placement: Joystick on left, Fire Button on right.</li>
+<li>by default, the offset Width between Joystick and Button is 400 px.  This can be changed by setting <code>opts.buttonOffset</code> to the desired integer, for example, 600.</li>
+<li>By default the Button will always be placed at the same Height on the page as the Joystick Base.</li>
+<li>You may manually change the Button's location by setting <code>opts.buttonX</code> and <code>opts.buttonY</code> to the desired page X and Y coordinates.</li>
+<li>The fire Button has a simple boolean flag attached to it called <code>.buttonPressed</code> which is true if pressed, false if not pressed.  If your VirtualJoystick object is called 'joystick', then this would become <code>joystick.buttonPressed</code>
+</li>
+<li>Inside your game loop, test if <code>joystick.buttonPressed</code> is true, and perform the appropriate action in your code, such as 'Fire bullet'.<br>
+</li>
+</ul>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Virtualjoystick.js maintained by <a href="https://github.com/erichlof">erichlof</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
