@@ -24,7 +24,7 @@ It shows how to limit the distance that the stick can travel from its base. by [
 \[[view source](https://github.com/jeromeetienne/virtualjoystick.js/blob/master/examples/LimitStickTravelDemoStationaryBase.html)\] :
 Limited Stick (same as above), but with Stationary Base. by [@erichlof](https://github.com/erichlof)
 * [examples/FireButtonDemo.html](http://erichlof.github.io/virtualjoystick.js/examples/FireButtonDemo.html)
-\[[view source](https://github.com/jeromeetienne/virtualjoystick.js/blob/master/examples/FireButtonDemo.html)\] :
+\[[view source](https://github.com/erichlof/virtualjoystick.js/blob/master/examples/FireButtonDemo.html)\] :
 Shows how to add a Fire Button to the Joystick. by [@erichlof](https://github.com/erichlof)
 
 How To Install It
