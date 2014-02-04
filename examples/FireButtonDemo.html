@@ -49,7 +49,9 @@
 		var controls = new THREEx.FirstPersonControls(camera);
 		var lookVector = new THREE.Vector3();
 		var renderer = new THREE.WebGLRenderer();
-
+		renderer.setSize(window.innerWidth, window.innerHeight);
+		document.body.appendChild(renderer.domElement);
+		window.addEventListener('resize', onWindowResize, false);
 
 		var cubeGeometry = new THREE.CubeGeometry(20, 20, 20);
 		var cubeMaterial = new THREE.MeshLambertMaterial({
@@ -90,20 +92,34 @@
 		scene.add(floor);
 
 		var frameTime = 0;
-		var canShoot = true;
+		var gravity = new THREE.Vector3(0, -0.1, 0); //-0.2
+		var frictionConstant = 0.09;
+		var groundNormal = new THREE.Vector3(0, -1, 0);
 
 		function Bullet() {
 			this.alive = false;
 			this.position = new THREE.Vector3();
 			this.direction = new THREE.Vector3();
+			this.friction = new THREE.Vector3();
 		}
 		var bullet = new Bullet();
-		var bulletSpeed = 5;
+		var bulletSpeed = 10;
 		var bulletCounter = 0;
+		var canShoot = true;
 
 		var debugText1 = document.getElementById("debug1");
 		var debugText2 = document.getElementById("debug2");
 		var debugText3 = document.getElementById("debug3");
+
+		THREE.extend(THREE.Vector3.prototype, {
+
+			reflect: function() {
+				var v1 = new THREE.Vector3();
+				return function(normal) {
+					return this.sub(v1.copy(normal).multiplyScalar(2 * this.dot(normal)));
+				};
+			}()
+		});
 		 // END GLOBAL VARIABLES /////////////////////////////////////////////////////////////////
 
 		setup();
@@ -112,30 +128,28 @@
 
 		function setup() {
 
-			renderer.setSize(window.innerWidth, window.innerHeight);
-			document.body.appendChild(renderer.domElement);
-			window.addEventListener('resize', onWindowResize, false);
 			light.position.set(50, 50, 50);
 			sphere.position = light.position;
-
-
+			//move player camera up a little
+			camera.position.y = 10;
+			//move player camera back
 			camera.position.z = 100;
+			//begin by looking at the origin
 			camera.lookAt(scene);
 
 
-			controls.movementSpeed = 500;
+			controls.movementSpeed = 100;
 			controls.lookSpeed = 0.125;
 			controls.lookVertical = true;
-
 
 			cube.rotation.y = 0.6;
 
 		} //end function setup()
 
 		function animate() {
-
+			//keep looping through animate()
 			requestAnimationFrame(animate);
-
+			//store how much time has passed since the last animation frame
 			frameTime = clock.getDelta();
 
 			if (keyboard.pressed("D")) {
@@ -145,9 +159,6 @@
 				controls.moveLeft = true;
 			} else controls.moveLeft = false;
 			if (keyboard.pressed("W")) {
-				//lookVector.subVectors(controls.target, camera.position);
-				//lookVector.multiplyScalar(200*frameTime);
-				//camera.position.add(lookVector);
 				controls.moveForward = true;
 			} else controls.moveForward = false;
 			if (keyboard.pressed("S")) {
@@ -156,47 +167,55 @@
 
 
 			if (joystick._pressed == true) {
+				//joystick left and right will turn the camera in that direction
 				controls.lon += joystick.deltaX() * frameTime;
-				controls.lat -= joystick.deltaY() * frameTime;
-				//lookVector.subVectors(camera.position, controls.target);
-				//lookVector.multiplyScalar(joystick.deltaY() * frameTime);
-				//camera.position.add(lookVector);
-			}
+				//joystick up and down will tilt the camera up and down
+				//controls.lat -= joystick.deltaY() * frameTime;
 
+				//joystick up will move player forward, joystick down moves backward
+				lookVector.subVectors(camera.position, controls.target);
+				lookVector.multiplyScalar(joystick.deltaY() * frameTime);
+				camera.position.add(lookVector);
+			}
+			//if firebutton is NOT pressed, reset it so we can fire again
 			if (joystick.buttonPressed == false) {
 				canShoot = true;
 			}
-
+			//if firebutton IS pressed, check to see if we can shoot
 			if (joystick.buttonPressed == true) {
 				if (canShoot == true) {
 					shootBullet();
+					//turn off shooting so we don't rapid fire
 					canShoot = false;
 				}
 			}
-
+			//if bullet is alive, update it
 			if (bullet.alive == true) {
 				moveBullet();
 			}
-
+			//update first person controls
 			controls.update(frameTime);
-			camera.position.y = 0;
+			//no flying, clamp player camera to slightly above the ground
+			camera.position.y = 10;
+			//render the scene with our camera
 			renderer.render(scene, camera);
 
-			debugText1.innerHTML = "bulletCounter: " + bulletCounter;
+			//helpful real-time debug text, so we can monitor game variables
+			debugText1.innerHTML = "bulletSpherePos.x: " + bulletSphere.position.x.toFixed(1);
 			debugText2.innerHTML = "bulletSpherePos.z: " + bulletSphere.position.z.toFixed(1);
-			debugText3.innerHTML = "canShoot: " + canShoot;
+			debugText3.innerHTML = "bulletSpherePos.y: " + bulletSphere.position.y.toFixed(1);
 
 		} //end function animate()
 
 		function shootBullet() {
-
+			//set bullet to alive
 			bullet.alive = true;
 			//spawn bullet at pleyer's location
 			bullet.position.copy(camera.position);
 			//get shooting direction from look target
 			bullet.direction.subVectors(controls.target, camera.position);
 
-			//move bullet out 20 units from the player
+			//move bullet out 20 units from the player, so it's not in our face
 			bullet.direction.multiplyScalar(20);
 			bullet.position.add(bullet.direction);
 			//reset bullet direction to unit length of 1
@@ -204,13 +223,36 @@
 			//multiply by speed
 			bullet.direction.multiplyScalar(bulletSpeed);
 
-			bulletCounter += 1;
+			//bulletCounter += 1;
 
 		}
 
 		function moveBullet() {
 
+			//update bullet's direction due to gravity
+			bullet.direction.add(gravity) * frameTime;
+
+			//add bullet direction to bullet's position every frame
 			bullet.position.add(bullet.direction) * frameTime;
+
+			//check if bullet bounces off of ground
+			if (bullet.position.y < -10) {
+				//clamp bullet to above the ground
+				bullet.position.y = -10;
+				//reflect bullet's direction. groundNormal points straight up
+				bullet.direction.reflect(groundNormal);
+
+				//update bullet's direction due to opposing force of friction
+				//first, copy the bullet's current direction
+				bullet.friction.copy(bullet.direction);
+				//negate it, giving us the opposing direction, then scale it down a little
+				bullet.friction.negate().multiplyScalar(frictionConstant);
+				//finally, add this friction back into the current direction. This will
+				// result in slowing the bullet down
+				bullet.direction.add(bullet.friction);
+			}
+
+			//copy bullet's position to the red sphere object so we can see it
 			bulletSphere.position.copy(bullet.position);
 
 		}
