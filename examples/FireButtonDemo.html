@@ -25,8 +25,8 @@
 
 	<script src="http://threejs.org/build/three.min.js"></script>
 	<script src="http://jeromeetienne.github.io/threex.keyboardstate/threex.keyboardstate.js"></script>
-	<script src="../virtualjoystick.js"></script>
-	<script src="threex.FirstPersonControls.js"></script>
+	<script src="js/virtualjoystick.js"></script>
+	<script src="js/threex.FirstPersonControls.js"></script>
 	<script>
 		// GLOBAL VARIABLES ////////////////////////////////////////////////////////////////////////////
 		var scene = new THREE.Scene();
@@ -140,7 +140,6 @@
 			//setup controls parameters
 			controls.movementSpeed = 200;
 			controls.lookSpeed = 0.125;
-			controls.lookVertical = true;
 
 			cube.rotation.y = 0.6;
 
@@ -151,6 +150,7 @@
 			requestAnimationFrame(animate);
 			//store how much time has passed since the last animation frame
 			frameTime = clock.getDelta();
+			
 
 			//query keyboard for keypresses 
 			if (keyboard.pressed("D")) {
@@ -197,10 +197,13 @@
 				moveBullet();
 			}
 			
-			//update first person controls
-			controls.update(frameTime);
 			//no flying, clamp player camera to slightly above the ground
 			camera.position.y = 10;
+			
+			//update first person controls after setting camera.position.y because
+			//the update function needs the correct location of the camera to work properly
+			controls.update(frameTime);
+			
 			//render the scene with our camera
 			renderer.render(scene, camera);
 
@@ -218,7 +221,6 @@
 			bullet.position.copy(camera.position);
 			//get shooting direction from look target
 			bullet.direction.subVectors(controls.target, camera.position);
-
 			//move bullet out 20 units from the player, so it's not in our face
 			bullet.direction.multiplyScalar(20);
 			bullet.position.add(bullet.direction);
