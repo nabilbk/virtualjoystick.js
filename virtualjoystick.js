@@ -316,7 +316,8 @@ VirtualJoystick.prototype._onButtonDown = function() {
 
 VirtualJoystick.prototype._onMouseUp = function(event) {
 	event.preventDefault();
-	this._onButtonUp();
+	if (this._addButton == true)
+		this._onButtonUp();
 	return this._onUp();
 };
 
