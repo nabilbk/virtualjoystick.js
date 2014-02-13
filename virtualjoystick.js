@@ -4,6 +4,7 @@ var VirtualJoystick = function(opts) {
 	this._strokeStyle = opts.strokeStyle || 'cyan';
 	this._stickEl = opts.stickElement || this._buildJoystickStick();
 	this._baseEl = opts.baseElement || this._buildJoystickBase();
+	this._hideJoystick = opts.hideJoystick || false;
 	this._mouseSupport = opts.mouseSupport !== undefined ? opts.mouseSupport : false;
 	this._stationaryBase = opts.stationaryBase || false;
 	this._addButton = opts.addButton || false;
@@ -29,6 +30,9 @@ var VirtualJoystick = function(opts) {
 		this._buttonEl.style.position = "absolute";
 		this._buttonEl.style.display = "none";
 	}
+	
+	if(this._hideJoystick === true)
+		this._stationaryBase = false;
 
 	this._limitStickTravel = opts.limitStickTravel || false;
 	if (this._stationaryBase === true) this._limitStickTravel = true;
@@ -248,8 +252,10 @@ VirtualJoystick.prototype._onDown = function(x, y) {
 	if (this._stationaryBase == false) {
 		this._baseX = x;
 		this._baseY = y;
-		this._baseEl.style.display = "";
-		this._move(this._baseEl.style, (this._baseX - this._baseEl.width / 2), (this._baseY - this._baseEl.height / 2));
+		if(this._hideJoystick == false){
+			this._baseEl.style.display = "";
+			this._move(this._baseEl.style, (this._baseX - this._baseEl.width / 2), (this._baseY - this._baseEl.height / 2));
+		}
 	}
 
 	this._stickX = x;
@@ -266,9 +272,10 @@ VirtualJoystick.prototype._onDown = function(x, y) {
 			this._stickY = stickNormalizedY * this._stickRadius + this._baseY;
 		}
 	}
-
-	this._stickEl.style.display = "";
-	this._move(this._stickEl.style, (this._stickX - this._stickEl.width / 2), (this._stickY - this._stickEl.height / 2));
+	if(this._hideJoystick == false){
+		this._stickEl.style.display = "";
+		this._move(this._stickEl.style, (this._stickX - this._stickEl.width / 2), (this._stickY - this._stickEl.height / 2));
+	}
 };
 
 VirtualJoystick.prototype._onMove = function(x, y) {
@@ -287,7 +294,9 @@ VirtualJoystick.prototype._onMove = function(x, y) {
 			this._stickY = stickNormalizedY * this._stickRadius + this._baseY;
 		}
 	}
-	this._move(this._stickEl.style, (this._stickX - this._stickEl.width / 2), (this._stickY - this._stickEl.height / 2));
+	if(this._hideJoystick == false){
+		this._move(this._stickEl.style, (this._stickX - this._stickEl.width / 2), (this._stickY - this._stickEl.height / 2));
+	}
 };
 
 VirtualJoystick.prototype._onButtonUp = function() {
