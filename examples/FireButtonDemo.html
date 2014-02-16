@@ -111,15 +111,6 @@
 		var debugText2 = document.getElementById("debug2");
 		var debugText3 = document.getElementById("debug3");
 
-		THREE.extend(THREE.Vector3.prototype, {
-
-			reflect: function() {
-				var v1 = new THREE.Vector3();
-				return function(normal) {
-					return this.sub(v1.copy(normal).multiplyScalar(2 * this.dot(normal)));
-				};
-			}()
-		});
 		 // END GLOBAL VARIABLES /////////////////////////////////////////////////////////////////
 
 		setup();
