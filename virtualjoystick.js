@@ -62,9 +62,9 @@ var VirtualJoystick = function(opts) {
 		this._buttonEl.style.display = "";
 		this._buttonEl.style.left = (this._buttonX - this._buttonEl.width / 2) + "px";
 		this._buttonEl.style.top = (this._buttonY - this._buttonEl.height / 2) + "px";
-		this._buttonEl.style.zIndex = "10";
+		///this._buttonEl.style.zIndex = "10";
 	}
-	this._transform = (opts.useCssTransform !== undefined ? opts.useCssTransform : true) ? this._getTransformProperty() : false;       
+	this._transform = (opts.useCssTransform !== undefined ? opts.useCssTransform : true) ? this._getTransformProperty() : false;       
 	this._has3d = this._check3D();
 
 	var __bind = function(fn, me) {
@@ -79,6 +79,9 @@ var VirtualJoystick = function(opts) {
 		this._baseEl.addEventListener('touchstart', this._$onTouchStart, false);
 		this._baseEl.addEventListener('touchend', this._$onTouchEnd, false);
 		this._baseEl.addEventListener('touchmove', this._$onTouchMove, false);
+		//this._stickEl.addEventListener('touchstart', this._$onTouchStart, false);
+		//this._stickEl.addEventListener('touchend', this._$onTouchEnd, false);
+		//this._stickEl.addEventListener('touchmove', this._$onTouchMove, false);
 	} else {
 		this._container.addEventListener('touchstart', this._$onTouchStart, false);
 		this._container.addEventListener('touchend', this._$onTouchEnd, false);
@@ -93,12 +96,12 @@ var VirtualJoystick = function(opts) {
 			this._baseEl.addEventListener('mousedown', this._$onMouseDown, false);
 			this._baseEl.addEventListener('mouseup', this._$onMouseUp, false);
 			this._baseEl.addEventListener('mousemove', this._$onMouseMove, false);
-			this._stickEl.addEventListener('mousedown', this._$onMouseDown, false);
-			this._stickEl.addEventListener('mouseup', this._$onMouseUp, false);
-			this._stickEl.addEventListener('mousemove', this._$onMouseMove, false);
+			//this._stickEl.addEventListener('mousedown', this._$onMouseDown, false);
+			//this._stickEl.addEventListener('mouseup', this._$onMouseUp, false);
+			//this._stickEl.addEventListener('mousemove', this._$onMouseMove, false);
 		} else {
 			this._container.addEventListener('mousedown', this._$onMouseDown, false);
-			this._container.addEventListener('mouseup'   , this._$onMouseUp, false);
+			this._container.addEventListener('mouseup'   , this._$onMouseUp, false);
 			this._container.addEventListener('mousemove', this._$onMouseMove, false);
 
 		}
@@ -135,9 +138,9 @@ VirtualJoystick.prototype.destroy = function() {
 			this._baseEl.removeEventListener('mouseup', this._$onMouseUp, false);
 			this._baseEl.removeEventListener('mousedown', this._$onMouseDown, false);
 			this._baseEl.removeEventListener('mousemove', this._$onMouseMove, false);
-			this._stickEl.removeEventListener('mouseup', this._$onMouseUp, false);
-			this._stickEl.removeEventListener('mousedown', this._$onMouseDown, false);
-			this._stickEl.removeEventListener('mousemove', this._$onMouseMove, false);
+			//this._stickEl.removeEventListener('mouseup', this._$onMouseUp, false);
+			//this._stickEl.removeEventListener('mousedown', this._$onMouseDown, false);
+			//this._stickEl.removeEventListener('mousemove', this._$onMouseMove, false);
 		} else {
 			this._container.removeEventListener('mouseup', this._$onMouseUp, false);
 			this._container.removeEventListener('mousedown', this._$onMouseDown, false);
@@ -171,7 +174,7 @@ VirtualJoystick.touchScreenAvailable = function() {
 	};
 	destObj.removeEventListener	= function(event, fct){
 		if(this._events === undefined) 	this._events	= {};
-		if( event in this._events === false  )	return;
+		if( event in this._events === false  )	return;
 		this._events[event].splice(this._events[event].indexOf(fct), 1);
 	};
 	destObj.dispatchEvent		= function(event /* , args... */){
@@ -188,7 +191,7 @@ VirtualJoystick.touchScreenAvailable = function() {
 
 
 //////////////////////////////////////////////////////////////////////////////////
-//                                                                                //
+//                                                                                //
 //////////////////////////////////////////////////////////////////////////////////
 
 VirtualJoystick.prototype.deltaX = function() {
@@ -252,10 +255,10 @@ VirtualJoystick.prototype._onDown = function(x, y) {
 	if (this._stationaryBase == false) {
 		this._baseX = x;
 		this._baseY = y;
-		if(this._hideJoystick == false){
+		//if(this._hideJoystick == false){
 			this._baseEl.style.display = "";
 			this._move(this._baseEl.style, (this._baseX - this._baseEl.width / 2), (this._baseY - this._baseEl.height / 2));
-		}
+		//}
 	}
 
 	this._stickX = x;
@@ -272,10 +275,10 @@ VirtualJoystick.prototype._onDown = function(x, y) {
 			this._stickY = stickNormalizedY * this._stickRadius + this._baseY;
 		}
 	}
-	if(this._hideJoystick == false){
+	//if(this._hideJoystick == false){
 		this._stickEl.style.display = "";
 		this._move(this._stickEl.style, (this._stickX - this._stickEl.width / 2), (this._stickY - this._stickEl.height / 2));
-	}
+	//}
 };
 
 VirtualJoystick.prototype._onMove = function(x, y) {
@@ -294,9 +297,10 @@ VirtualJoystick.prototype._onMove = function(x, y) {
 			this._stickY = stickNormalizedY * this._stickRadius + this._baseY;
 		}
 	}
-	if(this._hideJoystick == false){
+	//if(this._hideJoystick == false){
+		this._stickEl.style.display = "";
 		this._move(this._stickEl.style, (this._stickX - this._stickEl.width / 2), (this._stickY - this._stickEl.height / 2));
-	}
+	//}
 };
 
 VirtualJoystick.prototype._onButtonUp = function() {
@@ -324,14 +328,14 @@ VirtualJoystick.prototype._onButtonDown = function() {
 //////////////////////////////////////////////////////////////////////////////////
 
 VirtualJoystick.prototype._onMouseUp = function(event) {
-	event.preventDefault();
+	///event.preventDefault();
 	if (this._addButton == true)
 		this._onButtonUp();
 	return this._onUp();
 };
 
 VirtualJoystick.prototype._onMouseDown = function(event) {
-	event.preventDefault();
+	///event.preventDefault();
 	var x = event.clientX;
 	var y = event.clientY;
 	if (event.target == this._buttonEl) return;
@@ -340,7 +344,7 @@ VirtualJoystick.prototype._onMouseDown = function(event) {
 
 VirtualJoystick.prototype._onMouseMove = function(event) {
 	if (this._pressed == true) {
-		event.preventDefault();
+		///event.preventDefault();
 		if (event.target == this._buttonEl) return;
 		var x = event.clientX;
 		var y = event.clientY;
@@ -348,12 +352,12 @@ VirtualJoystick.prototype._onMouseMove = function(event) {
 	}
 };
 VirtualJoystick.prototype._onButtonMouseUp = function(event) {
-	event.preventDefault();
+	///event.preventDefault();
 	return this._onButtonUp();
 };
 
 VirtualJoystick.prototype._onButtonMouseDown = function(event) {
-	event.preventDefault();
+	///event.preventDefault();
 	return this._onButtonDown();
 };
 
@@ -362,7 +366,7 @@ VirtualJoystick.prototype._onButtonMouseDown = function(event) {
 //////////////////////////////////////////////////////////////////////////////////
 
 VirtualJoystick.prototype._onTouchStart = function(event) {
-	event.preventDefault(); //var touch	= event.targetTouches[0];
+	event.preventDefault(); 
 	var touch = event.changedTouches[0];
 	if (touch.target == this._buttonEl) return;
 
@@ -372,17 +376,16 @@ VirtualJoystick.prototype._onTouchStart = function(event) {
 };
 
 VirtualJoystick.prototype._onTouchEnd = function(event) {
-	event.preventDefault();
+
 	var touch = event.changedTouches[0];
 	if (touch.target == this._buttonEl) return;
-    
-    return this._onUp();
+    
+    return this._onUp();
 };
 
 VirtualJoystick.prototype._onTouchMove = function(event) {
-	event.preventDefault();
-	var touch = event.changedTouches[0];
-	if (touch.target == this._buttonEl) return;
+
+	var touch = event.targetTouches[0];
 
 	var x = touch.pageX;
 	var y = touch.pageY;
@@ -390,12 +393,10 @@ VirtualJoystick.prototype._onTouchMove = function(event) {
 };
 
 VirtualJoystick.prototype._onButtonTouchStart = function(event) {
-	event.preventDefault();
 	return this._onButtonDown();
 };
 
 VirtualJoystick.prototype._onButtonTouchEnd = function(event) {
-	event.preventDefault();
 	return this._onButtonUp();
 };
 
@@ -408,8 +409,8 @@ VirtualJoystick.prototype._onButtonTouchEnd = function(event) {
  */
 VirtualJoystick.prototype._buildJoystickBase = function() {
 	var canvas = document.createElement('canvas');
-	canvas.width = 550;
-	canvas.height = 550;
+	canvas.width = 550;//550
+	canvas.height = 550;//550
 	var ctx = canvas.getContext('2d');
 	ctx.beginPath();
 	ctx.strokeStyle = this._strokeStyle;
@@ -431,8 +432,8 @@ VirtualJoystick.prototype._buildJoystickBase = function() {
  */
 VirtualJoystick.prototype._buildJoystickStick = function() {
 	var canvas = document.createElement('canvas');
-	canvas.width = 86;
-	canvas.height = 86;
+	canvas.width = 550;
+	canvas.height = 550;
 	var ctx = canvas.getContext('2d');
 	ctx.beginPath();
 	ctx.strokeStyle = this._strokeStyle;
