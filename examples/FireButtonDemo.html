@@ -2,11 +2,21 @@
 <html>
 
 <head>
-	<meta name="viewport" content="user-scalable=no">
+	<meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
 	<title>Fire Button Demo</title>
+	<style>
+		body {
+			background-color: rgb(0, 0, 0);
+			margin: 0;
+			padding: 0;
+			overflow: hidden;
+		}
+	</style>
 </head>
 
 <body>
+	<div id="container"> </div>
+	
 	<div id="help" style="position:fixed; left:40%; top:4%; color:grey;">
 		virtualjoystick.js Fire Button Demo
 	</div>
@@ -25,8 +35,8 @@
 
 	<script src="http://threejs.org/build/three.min.js"></script>
 	<script src="http://jeromeetienne.github.io/threex.keyboardstate/threex.keyboardstate.js"></script>
-	<script src="../virtualjoystick.js"></script>
-	<script src="threex.FirstPersonControls.js"></script>
+	<script src="js/virtualjoystick.js"></script>
+	<script src="js/threex.FirstPersonControls.js"></script>
 	<script>
 		// GLOBAL VARIABLES ////////////////////////////////////////////////////////////////////////////
 		var scene = new THREE.Scene();
@@ -38,11 +48,11 @@
 			mouseSupport: true,
 			addButton: true,
 			stationaryBase: true,
-			switchHands: true
-			//baseX: 680,
-			//baseY: 400,
-			//buttonX: 800,
-			//buttonY: 500,
+			//switchHands: true,
+			baseX: 100,
+			baseY: 200,
+			buttonX: 400,
+			buttonY: 200
 			//limitStickTravel: true,
 			//stickRadius: 50	
 		});
@@ -50,15 +60,15 @@
 		var lookVector = new THREE.Vector3();
 		var renderer = new THREE.WebGLRenderer();
 		renderer.setSize(window.innerWidth, window.innerHeight);
-		document.body.appendChild(renderer.domElement);
+		document.getElementById("container").appendChild(renderer.domElement);
 		window.addEventListener('resize', onWindowResize, false);
 
-		var cubeGeometry = new THREE.CubeGeometry(20, 20, 20);
-		var cubeMaterial = new THREE.MeshLambertMaterial({
+		var boxGeometry = new THREE.BoxGeometry(20, 20, 20);
+		var boxMaterial = new THREE.MeshLambertMaterial({
 			color: 'rgb(0,255,0)'
 		});
-		var cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
-		scene.add(cube);
+		var box = new THREE.Mesh(boxGeometry, boxMaterial);
+		scene.add(box);
 
 		var sphereGeometry = new THREE.SphereGeometry(5);
 		var sphereMaterial = new THREE.MeshBasicMaterial({
@@ -132,7 +142,7 @@
 			controls.movementSpeed = 200;
 			controls.lookSpeed = 0.125;
 
-			cube.rotation.y = 0.6;
+			box.rotation.y = 0.6;
 
 		} //end function setup()
 
