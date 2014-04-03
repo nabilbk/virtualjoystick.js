@@ -35,8 +35,8 @@
 
 	<script src="http://threejs.org/build/three.min.js"></script>
 	<script src="http://jeromeetienne.github.io/threex.keyboardstate/threex.keyboardstate.js"></script>
-	<script src="js/virtualjoystick.js"></script>
-	<script src="js/threex.FirstPersonControls.js"></script>
+	<script src="../virtualjoystick.js"></script>
+	<script src="threex.FirstPersonControls.js"></script>
 	<script>
 		// GLOBAL VARIABLES ////////////////////////////////////////////////////////////////////////////
 		var scene = new THREE.Scene();
@@ -45,6 +45,7 @@
 
 		var keyboard = new THREEx.KeyboardState();
 		var joystick = new VirtualJoystick({
+			container: document.getElementById("container"),
 			mouseSupport: true,
 			addButton: true,
 			stationaryBase: true,
@@ -52,9 +53,9 @@
 			baseX: 100,
 			baseY: 200,
 			buttonX: 400,
-			buttonY: 200
-			//limitStickTravel: true,
-			//stickRadius: 50	
+			buttonY: 200,
+			limitStickTravel: true,
+			stickRadius: 50	
 		});
 		var controls = new THREEx.FirstPersonControls(camera);
 		var lookVector = new THREE.Vector3();
