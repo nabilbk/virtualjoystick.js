@@ -93,7 +93,7 @@ var VirtualJoystick = function(opts) {
 		this._$onMouseUp = __bind(this._onMouseUp, this);
 		this._$onMouseMove = __bind(this._onMouseMove, this);
 		this._container.addEventListener('mousedown', this._$onMouseDown, false);
-		this._container.addEventListener('mouseup'   , this._$onMouseUp, false);
+		this._container.addEventListener('mouseup', this._$onMouseUp, false);
 		this._container.addEventListener('mousemove', this._$onMouseMove, false);
 	}
 	if (this._addButton === true) {
@@ -379,15 +379,6 @@ VirtualJoystick.prototype._onTouchMove = function(event) {
 	y = touch.pageY;
 	return this._onMove(x, y);
 };
-/*
-VirtualJoystick.prototype._onButtonTouchStart = function(event) {
-	return this._onButtonDown();
-};
-
-VirtualJoystick.prototype._onButtonTouchEnd = function(event) {
-	return this._onButtonUp();
-};
-*/
 
 //////////////////////////////////////////////////////////////////////////////////
 //		build default stickEl and baseEl				//
