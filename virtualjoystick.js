@@ -146,7 +146,7 @@ VirtualJoystick.touchScreenAvailable = function() {
 	};
 	destObj.removeEventListener	= function(event, fct){
 		if(this._events === undefined) 	this._events	= {};
-		if( event in this._events === false  )	return;
+		if( event in this._events === false )	return;
 		this._events[event].splice(this._events[event].indexOf(fct), 1);
 	};
 	destObj.dispatchEvent		= function(event /* , args... */){
@@ -389,8 +389,8 @@ VirtualJoystick.prototype._onTouchMove = function(event) {
  */
 VirtualJoystick.prototype._buildJoystickBase = function() {
 	var canvas = document.createElement('canvas');
-	canvas.width = 126;//550
-	canvas.height = 126;//550
+	canvas.width = 126;
+	canvas.height = 126;
 	
 	var ctx = canvas.getContext('2d');
 	ctx.beginPath();
@@ -413,8 +413,8 @@ VirtualJoystick.prototype._buildJoystickBase = function() {
  */
 VirtualJoystick.prototype._buildJoystickStick = function() {
 	var canvas = document.createElement('canvas');
-	canvas.width = 86;//86
-	canvas.height = 86;//86
+	canvas.width = 86;
+	canvas.height = 86;
 	var ctx = canvas.getContext('2d');
 	ctx.beginPath();
 	ctx.strokeStyle = this._strokeStyle;
