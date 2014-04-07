@@ -21,7 +21,7 @@ THREEx.FirstPersonControls = function ( object, domElement ) {
 	this.mouseY = 0;
 
 	this.lat = 0;
-	this.lon = -90;
+	this.lon = -90;//-90
 	this.phi = 0;
 	this.theta = 0;
 
@@ -79,6 +79,7 @@ THREEx.FirstPersonControls = function ( object, domElement ) {
 		this.lat = Math.max( - 85, Math.min( 85, this.lat ) );
 		
 		this.phi = THREE.Math.degToRad( 90 - this.lat );
+		
 		this.theta = THREE.Math.degToRad( this.lon );
 
 		targetPosition = this.target;
@@ -87,9 +88,9 @@ THREEx.FirstPersonControls = function ( object, domElement ) {
 		targetPosition.x = position.x + Math.sin( this.phi ) * Math.cos( this.theta ); //position.x + 100
 		targetPosition.y = position.y + Math.cos( this.phi );//position.y + 100
 		targetPosition.z = position.z + Math.sin( this.phi ) * Math.sin( this.theta );//position.z + 100
-
+		
 		this.object.lookAt( targetPosition );
-
+		
 	};
 
 
