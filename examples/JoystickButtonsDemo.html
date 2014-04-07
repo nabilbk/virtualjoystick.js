@@ -113,7 +113,7 @@
 			this.position = new THREE.Vector3();
 			this.direction = new THREE.Vector3();
 			this.friction = new THREE.Vector3();
-                  	this.oldPosition = new THREE.Vector3();
+			this.oldPosition = new THREE.Vector3();
 			this.newPosition = new THREE.Vector3();
 			
 		}
@@ -121,11 +121,11 @@
 		var bulletSpeed = 0;
 		var bulletCounter = 0;
 		var canShoot = true;
-          	var canJump = true;
-          	var isJumping = false;
-          	var jumpDirection = new THREE.Vector3(0, 1, 0);
-          	var jumpSpeed = 0;
-          	var playerSpeed = 0;
+		var canJump = true;
+		var isJumping = false;
+		var jumpDirection = new THREE.Vector3(0, 1, 0);
+		var jumpSpeed = 0;
+		var playerSpeed = 0;
 
 		var debugText1 = document.getElementById("debug1");
 		var debugText2 = document.getElementById("debug2");
@@ -205,8 +205,8 @@
 			if (joystick._pressed) {
 				
 				//joystick up will move player forward, joystick down moves backward
-                          	playerSpeed = joystick.deltaY();
-                          	camera.translateZ( playerSpeed * frameTime );
+				playerSpeed = joystick.deltaY();
+				camera.translateZ( playerSpeed * frameTime );
 				
 				//joystick left and right will turn the camera in that direction
 				controls.lon += joystick.deltaX() * frameTime;
