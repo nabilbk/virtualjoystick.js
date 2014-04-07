@@ -23,9 +23,9 @@ It shows how to limit the distance that the stick can travel from its base. by [
 * [examples/LimitStickTravelDemoStationaryBase.html](http://jeromeetienne.github.io/virtualjoystick.js/examples/LimitStickTravelDemoStationaryBase.html)
 \[[view source](https://github.com/jeromeetienne/virtualjoystick.js/blob/master/examples/LimitStickTravelDemoStationaryBase.html)\] :
 Limited Stick (same as above), but with Stationary Base. by [@erichlof](https://github.com/erichlof)
-* [examples/FireButtonDemo.html](http://erichlof.github.io/virtualjoystick.js/examples/FireButtonDemo.html)
-\[[view source](https://github.com/erichlof/virtualjoystick.js/blob/master/examples/FireButtonDemo.html)\] :
-Shows how to add a Fire Button to the Joystick. by [@erichlof](https://github.com/erichlof)
+* [examples/JoystickButtonsDemo.html](http://erichlof.github.io/virtualjoystick.js/examples/JoystickButtonsDemo.html)
+\[[view source](https://github.com/erichlof/virtualjoystick.js/blob/master/examples/JoystickButtonsDemo.html)\] :
+Shows how to add Buttons to the Joystick. by [@erichlof](https://github.com/erichlof)
 
 How To Install It
 =================
@@ -69,13 +69,12 @@ which is display for its *base*.
 * you may set ```opts.limitStickTravel``` to true in order to limit the distance that the stick can travel from its base.  This will create an invisible circle barrier that the stick cannot leave. 
 * if you do use ```opts.limitStickTravel``` , you can also set ```opts.stickRadius``` to the desired radius (in pixels).  The stick will now be confined to stickRadius.  If you do not set ```opts.stickRadius``` , it will default to 100 pixels radius.
 
-How to Use Fire Button
-----------------------
-* first, set ```opts.addButton``` to true
-* if you have a Stationary-Base Joystick, then by default, the Joystick will appear on the right and the Fire Button will appear on the left.
-* you may set ```opts.switchHands``` to true in order to switch this placement: Joystick on left, Fire Button on right.
-* by default, the offset Width between Joystick and Button is 400 px.  This can be changed by setting ```opts.buttonOffset``` to the desired integer, for example, 600.
-* By default the Button will always be placed at the same Height on the page as the Joystick Base.
-* You may manually change the Button's location by setting ```opts.buttonX``` and ```opts.buttonY``` to the desired page X and Y coordinates.
-* The fire Button has a simple boolean flag attached to it called ```.buttonPressed``` which is true if pressed, false if not pressed.  If your VirtualJoystick object is called 'joystick', then this would become ```joystick.buttonPressed```
-* Inside your game loop, test if ```joystick.buttonPressed``` is true, and perform the appropriate action in your code, such as 'Fire bullet'.  
+How to Use Buttons
+------------------
+* first, set ```opts.add1Button``` to true
+* if you have a Stationary-Base Joystick, then by default, the Joystick will appear on the left and the Buttons will appear on the right.
+* by default, the offset Width between Joystick and Buttons is 400 px.  This can be changed by setting ```opts.button1Offset``` to the desired integer, for example, 600.
+* By default the Buttons will always be placed at the same Height on the page as the Joystick Base.
+* You may manually change the Buttons' location by setting ```opts.button1X``` and ```opts.button1Y``` to the desired page X and Y coordinates.
+* The first Button has a simple boolean flag attached to it called ```.button1Pressed``` which is true if pressed, false if not pressed.  If your VirtualJoystick object is called 'joystick', then this would become ```joystick.button1Pressed```
+* Inside your game loop, test if ```joystick.button1Pressed``` is true, and perform the appropriate action in your code, such as 'Fire bullet'.  
