@@ -3,7 +3,7 @@
 
 <head>
 	<meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
-	<title>Fire Button Demo</title>
+	<title>Joystick Buttons Demo</title>
 	<style>
 		body {
 			background-color: rgb(0, 0, 0);
@@ -18,7 +18,7 @@
 	<div id="container"> </div>
 	
 	<div id="help" style="position:fixed; left:40%; top:4%; color:grey;">
-		virtualjoystick.js Fire Button Demo
+		virtualjoystick.js Buttons Demo
 	</div>
 
 	<div id="debug1" style="position:fixed; left:5%; top:4%; color:grey;">
@@ -35,8 +35,8 @@
 
 	<script src="http://threejs.org/build/three.min.js"></script>
 	<script src="http://jeromeetienne.github.io/threex.keyboardstate/threex.keyboardstate.js"></script>
-	<script src="../virtualjoystick.js"></script>
-	<script src="threex.FirstPersonControls.js"></script>
+	<script src="js/virtualButtonJoystick.js"></script>
+	<script src="js/threex.FirstPersonControls.js"></script>
 	<script>
 		// GLOBAL VARIABLES ////////////////////////////////////////////////////////////////////////////
 		var scene = new THREE.Scene();
@@ -47,13 +47,14 @@
 		var joystick = new VirtualJoystick({
 			container: document.getElementById("container"),
 			mouseSupport: true,
-			addButton: true,
+			add2Buttons: true,
 			stationaryBase: true,
-			//switchHands: true,
-			baseX: 100,
+			baseX: 120,
 			baseY: 200,
-			buttonX: 400,
-			buttonY: 200,
+			button1X: 400,
+			button1Y: 200,
+			button2X: 300,
+			button2Y: 200,
 			limitStickTravel: true,
 			stickRadius: 50	
 		});
@@ -103,7 +104,7 @@
 		scene.add(floor);
 
 		var frameTime = 0;
-		var gravity = new THREE.Vector3(0, -0.1, 0); //-0.2
+		var gravity = new THREE.Vector3(0, 0, 0); //-0.2
 		var frictionConstant = 0.09;
 		var groundNormal = new THREE.Vector3(0, 1, 0);
 
@@ -112,11 +113,19 @@
 			this.position = new THREE.Vector3();
 			this.direction = new THREE.Vector3();
 			this.friction = new THREE.Vector3();
+                  	this.oldPosition = new THREE.Vector3();
+			this.newPosition = new THREE.Vector3();
+			
 		}
 		var bullet = new Bullet();
-		var bulletSpeed = 10;
+		var bulletSpeed = 0;
 		var bulletCounter = 0;
 		var canShoot = true;
+          	var canJump = true;
+          	var isJumping = false;
+          	var jumpDirection = new THREE.Vector3(0, 1, 0);
+          	var jumpSpeed = 0;
+          	var playerSpeed = 0;
 
 		var debugText1 = document.getElementById("debug1");
 		var debugText2 = document.getElementById("debug2");
@@ -137,11 +146,11 @@
 			//move player camera back
 			camera.position.z = 100;
 			//begin by looking at the origin
-			camera.lookAt(scene);
+			//camera.lookAt(scene);
 
 			//setup controls parameters
-			controls.movementSpeed = 200;
-			controls.lookSpeed = 0.125;
+			controls.movementSpeed = 100;
+			//controls.lookSpeed = 0.125;
 
 			box.rotation.y = 0.6;
 
@@ -155,57 +164,65 @@
 			
 
 			//query keyboard for keypresses 
-			if (keyboard.pressed("D")) {
+			if (keyboard.pressed('D')) {
 				controls.moveRight = true;
 			} else controls.moveRight = false;
-			if (keyboard.pressed("A")) {
+			if (keyboard.pressed('A')) {
 				controls.moveLeft = true;
 			} else controls.moveLeft = false;
-			if (keyboard.pressed("W")) {
+			if (keyboard.pressed('W')) {
 				controls.moveForward = true;
 			} else controls.moveForward = false;
-			if (keyboard.pressed("S")) {
+			if (keyboard.pressed('S')) {
 				controls.moveBackward = true;
 			} else controls.moveBackward = false;
 			
 			//query fire button first, because it needs the current camera position
 			//if firebutton is NOT pressed, reset it so we can fire again
-			if (joystick.buttonPressed == false) {
+			if ( !joystick.button1Pressed ) {
 				canShoot = true;
 			}
 			//if firebutton IS pressed, check to see if we can shoot
-			if (joystick.buttonPressed == true) {
-				if (canShoot == true) {
+			if (joystick.button1Pressed) {
+				if (canShoot) {
 					shootBullet();
 					//turn off shooting so we don't rapid fire
 					canShoot = false;
 				}
 			}
+			if ( !joystick.button2Pressed && !keyboard.pressed('space') ) {
+				canJump = true;
+			}
+			
+			if ( !isJumping && ( joystick.button2Pressed || keyboard.pressed('space') ) ) {
+				if (canJump) {
+					jump();
+					//turn off shooting so we don't rapid fire
+					canJump = false;
+				}
+			}
 			//now, check if joystick Stick is being moved
-			if (joystick._pressed == true) {
+			if (joystick._pressed) {
+				
+				//joystick up will move player forward, joystick down moves backward
+                          	playerSpeed = joystick.deltaY();
+                          	camera.translateZ( playerSpeed * frameTime );
+				
 				//joystick left and right will turn the camera in that direction
 				controls.lon += joystick.deltaX() * frameTime;
 				//joystick up and down will tilt the camera up and down
 				//controls.lat -= joystick.deltaY() * frameTime;
-
-				//joystick up will move player forward, joystick down moves backward
-				lookVector.subVectors(camera.position, controls.target);
-				lookVector.multiplyScalar(joystick.deltaY() * frameTime);
-				camera.position.add(lookVector);
+				
 			}
 			
 			//if bullet is alive, update it
-			if (bullet.alive == true) {
+			if (bullet.alive)
 				moveBullet();
-			}
+				
+			if (isJumping)
+				updateJump();
 			
-			//no flying, clamp player camera to slightly above the ground
-			camera.position.y = 10;
-			
-			//update first person controls after setting camera.position.y because
-			//the update function needs the correct location of the camera to work properly
 			controls.update(frameTime);
-			
 			//render the scene with our camera
 			renderer.render(scene, camera);
 
@@ -221,27 +238,25 @@
 			bullet.alive = true;
 			//spawn bullet at player's location
 			bullet.position.copy(camera.position);
-			//get shooting direction from look target
-			bullet.direction.subVectors(controls.target, camera.position);
-			//move bullet out 20 units from the player, so it's not in our face
-			bullet.direction.multiplyScalar(20);
+			bulletSpeed = 200;
+			
+			bullet.oldPosition.copy(camera.position);
+			camera.translateZ(15);
+			bullet.newPosition.copy(camera.position);
+			camera.translateZ(-15);
+			bullet.direction.subVectors(bullet.oldPosition, bullet.newPosition);
 			bullet.position.add(bullet.direction);
-			//reset bullet direction to unit length of 1
-			bullet.direction.normalize();
-			//multiply by speed
-			bullet.direction.multiplyScalar(bulletSpeed);
-
-			//bulletCounter += 1;
-
+			//bullet.direction.normalize();
 		}
 
 		function moveBullet() {
-
+		
+			bullet.direction.normalize();
 			//update bullet's direction due to gravity
-			bullet.direction.add(gravity) * frameTime;
-
+			bullet.direction.y -= 1.5 * frameTime;
 			//add bullet direction to bullet's position every frame
-			bullet.position.add(bullet.direction) * frameTime;
+			bullet.direction.multiplyScalar(bulletSpeed * frameTime);
+			bullet.position.add(bullet.direction);
 
 			//check if bullet bounces off of ground
 			if (bullet.position.y < -10) {
@@ -249,20 +264,36 @@
 				bullet.position.y = -10;
 				//reflect bullet's direction. groundNormal points straight up
 				bullet.direction.reflect(groundNormal);
-
-				//update bullet's direction due to opposing force of friction
-				//first, copy the bullet's current direction
-				bullet.friction.copy(bullet.direction);
-				//negate it, giving us the opposing direction, then scale it down a little
-				bullet.friction.negate().multiplyScalar(frictionConstant);
-				//finally, add this friction back into the current direction. This will
-				// result in slowing the bullet down
-				bullet.direction.add(bullet.friction);
+				
+				bulletSpeed -= 20;
+				if (bulletSpeed <= 0){
+					bulletSpeed = 0;
+					bullet.alive = false;
+				}
 			}
 
 			//copy bullet's position to the red sphere object so we can see it
 			bulletSphere.position.copy(bullet.position);
 
+		}
+
+		function jump() {
+
+			jumpSpeed = 70;
+			isJumping = true;
+			
+		}
+		
+		function updateJump() {
+		
+			jumpSpeed -= 120 * frameTime;
+			camera.translateOnAxis(jumpDirection, jumpSpeed * frameTime);
+			
+			if (camera.position.y <= 10){
+				camera.position.y = 10;
+				isJumping = false;
+			}
+			
 		}
 
 		function onWindowResize() {
@@ -273,6 +304,7 @@
 			controls.handleResize();
 
 		}
+		
 	</script>
 </body>
 
