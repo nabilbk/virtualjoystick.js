@@ -8,20 +8,20 @@ post on
 
 Show Don't Tell
 ===============
-* [examples/basic.html](http://jeromeetienne.github.io/virtualjoystick.js/examples/basic.html)
-\[[view source](https://github.com/jeromeetienne/virtualjoystick.js/blob/master/examples/basic.html)\] :
+* [examples/basic.html](http://erichlof.github.io/virtualjoystick.js/examples/basic.html)
+\[[view source](https://github.com/erichlof/virtualjoystick.js/blob/master/examples/basic.html)\] :
 It shows a basic usage of the library.
-* [examples/dual.html](http://jeromeetienne.github.io/virtualjoystick.js/examples/dual.html)
-\[[view source](https://github.com/jeromeetienne/virtualjoystick.js/blob/master/examples/dual.html)\] :
+* [examples/dual.html](http://erichlof.github.io/virtualjoystick.js/examples/dual.html)
+\[[view source](https://github.com/erichlof/virtualjoystick.js/blob/master/examples/dual.html)\] :
 It shows how to have multiple virtual joystick on the same page
-* [examples/stationarybase.html](http://jeromeetienne.github.io/virtualjoystick.js/examples/stationarybase.html)
-\[[view source](https://github.com/jeromeetienne/virtualjoystick.js/blob/master/examples/stationarybase.html)\] :
+* [examples/stationarybase.html](http://erichlof.github.io/virtualjoystick.js/examples/stationarybase.html)
+\[[view source](https://github.com/erichlof/virtualjoystick.js/blob/master/examples/stationarybase.html)\] :
 It shows how to have a stationary base. by [@erichlof](https://github.com/erichlof)
-* [examples/LimitStickTravelDemo.html](http://jeromeetienne.github.io/virtualjoystick.js/examples/LimitStickTravelDemo.html)
-\[[view source](https://github.com/jeromeetienne/virtualjoystick.js/blob/master/examples/LimitStickTravelDemo.html)\] :
+* [examples/LimitStickTravelDemo.html](http://erichlof.github.io/virtualjoystick.js/examples/LimitStickTravelDemo.html)
+\[[view source](https://github.com/erichlof/virtualjoystick.js/blob/master/examples/LimitStickTravelDemo.html)\] :
 It shows how to limit the distance that the stick can travel from its base. by [@erichlof](https://github.com/erichlof)
-* [examples/LimitStickTravelDemoStationaryBase.html](http://jeromeetienne.github.io/virtualjoystick.js/examples/LimitStickTravelDemoStationaryBase.html)
-\[[view source](https://github.com/jeromeetienne/virtualjoystick.js/blob/master/examples/LimitStickTravelDemoStationaryBase.html)\] :
+* [examples/LimitStickTravelDemoStationaryBase.html](http://erichlof.github.io/virtualjoystick.js/examples/LimitStickTravelDemoStationaryBase.html)
+\[[view source](https://github.com/erichlof/virtualjoystick.js/blob/master/examples/LimitStickTravelDemoStationaryBase.html)\] :
 Limited Stick (same as above), but with Stationary Base. by [@erichlof](https://github.com/erichlof)
 * [examples/JoystickButtonsDemo.html](http://erichlof.github.io/virtualjoystick.js/examples/JoystickButtonsDemo.html)
 \[[view source](https://github.com/erichlof/virtualjoystick.js/blob/master/examples/JoystickButtonsDemo.html)\] :
