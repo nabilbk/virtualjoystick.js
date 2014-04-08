@@ -35,8 +35,8 @@
 
 	<script src="http://threejs.org/build/three.min.js"></script>
 	<script src="http://jeromeetienne.github.io/threex.keyboardstate/threex.keyboardstate.js"></script>
-	<script src="../virtualButtonJoystick.js"></script>
-	<script src="threex.FirstPersonControls.js"></script>
+	<script src="js/virtualButtonJoystick.js"></script>
+	<script src="js/threex.FirstPersonControls.js"></script>
 	<script>
 		// GLOBAL VARIABLES ////////////////////////////////////////////////////////////////////////////
 		var scene = new THREE.Scene();
@@ -49,12 +49,12 @@
 			mouseSupport: true,
 			add2Buttons: true,
 			stationaryBase: true,
-			baseX: 120,
-			baseY: 200,
-			button1X: 400,
-			button1Y: 200,
-			button2X: 300,
-			button2Y: 200,
+			baseX: 100,
+			baseY: 250,
+			button1X: 320,
+			button1Y: 250,
+			button2X: 220,
+			button2Y: 250,
 			limitStickTravel: true,
 			stickRadius: 50	
 		});
@@ -104,22 +104,13 @@
 		scene.add(floor);
 
 		var frameTime = 0;
-		var gravity = new THREE.Vector3(0, 0, 0); //-0.2
+		var gravity = 1;
 		var frictionConstant = 0.09;
 		var groundNormal = new THREE.Vector3(0, 1, 0);
-
-		function Bullet() {
-			this.alive = false;
-			this.position = new THREE.Vector3();
-			this.direction = new THREE.Vector3();
-			this.friction = new THREE.Vector3();
-			this.oldPosition = new THREE.Vector3();
-			this.newPosition = new THREE.Vector3();
-			
-		}
-		var bullet = new Bullet();
 		var bulletSpeed = 0;
-		var bulletCounter = 0;
+		var bulletDirection = new THREE.Vector3(0, 0, -1);
+		var bulletAlive = false;
+		//var bulletCounter = 0;
 		var canShoot = true;
 		var canJump = true;
 		var isJumping = false;
@@ -216,7 +207,7 @@
 			}
 			
 			//if bullet is alive, update it
-			if (bullet.alive)
+			if (bulletAlive)
 				moveBullet();
 				
 			if (isJumping)
@@ -235,45 +226,37 @@
 
 		function shootBullet() {
 			//set bullet to alive
-			bullet.alive = true;
+			bulletAlive = true;
+			bulletSpeed = 200;//200
 			//spawn bullet at player's location
-			bullet.position.copy(camera.position);
-			bulletSpeed = 200;
+			bulletSphere.position.copy(camera.position);
 			
-			bullet.oldPosition.copy(camera.position);
-			camera.translateZ(15);
-			bullet.newPosition.copy(camera.position);
-			camera.translateZ(-15);
-			bullet.direction.subVectors(bullet.oldPosition, bullet.newPosition);
-			bullet.position.add(bullet.direction);
-			//bullet.direction.normalize();
+			bulletDirection.set(0, 0, -1);
+			bulletDirection.applyQuaternion(camera.quaternion);
+			
+			bulletSphere.translateOnAxis(bulletDirection, 15);
+			
 		}
 
 		function moveBullet() {
-		
-			bullet.direction.normalize();
-			//update bullet's direction due to gravity
-			bullet.direction.y -= 1.5 * frameTime;
-			//add bullet direction to bullet's position every frame
-			bullet.direction.multiplyScalar(bulletSpeed * frameTime);
-			bullet.position.add(bullet.direction);
-
-			//check if bullet bounces off of ground
-			if (bullet.position.y < -10) {
+			
+			//bulletDirection.normalize();
+			bulletDirection.y -= 2 * frameTime;
+			
+			bulletSphere.translateOnAxis(bulletDirection, bulletSpeed * frameTime);
+			
+			if (bulletSphere.position.y < -5) {
 				//clamp bullet to above the ground
-				bullet.position.y = -10;
+				bulletSphere.position.y = -5;
 				//reflect bullet's direction. groundNormal points straight up
-				bullet.direction.reflect(groundNormal);
+				bulletDirection.reflect(groundNormal);
 				
-				bulletSpeed -= 20;
+				bulletSpeed -= 30;
 				if (bulletSpeed <= 0){
 					bulletSpeed = 0;
-					bullet.alive = false;
+					bulletAlive = false;
 				}
 			}
-
-			//copy bullet's position to the red sphere object so we can see it
-			bulletSphere.position.copy(bullet.position);
 
 		}
 
